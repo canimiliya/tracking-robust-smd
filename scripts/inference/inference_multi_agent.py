@@ -66,8 +66,7 @@ from smd.common import compute_collision_intensity, is_multi_agent_start_goal_st
     get_start_goal_pos_circle, get_state_pos_column, get_start_goal_pos_boundary, get_start_goal_pos_random_in_env
 from smd.common.pretty_print import *
 from smd.config.smd_params import SMDParams as params
-from smd.common.experiments import MultiAgentPlanningSingleTrialConfig, MultiAgentPlanningSingleTrialResult, \
-    get_result_dir_from_trial_config, TrialSuccessStatus
+from smd.common.experiments import MultiAgentPlanningSingleTrialConfig, get_result_dir_from_trial_config
 from torch_robotics.environments import *
 
 allow_ops_in_compiled_graph()
@@ -254,31 +253,16 @@ def run_multi_agent_trial(test_config: MultiAgentPlanningSingleTrialConfig):
     print(GREEN, 'Planning times:', planning_time, RESET)
 
     # ============================
-    # Gather stats.
+    # Save outputs.
     # ============================
-    single_trial_result = MultiAgentPlanningSingleTrialResult()
-    # The associated experiment config.
-    single_trial_result.trial_config = test_config
-    # The planning problem.
-    single_trial_result.start_state_pos_l = [start_l[i].cpu().numpy().tolist() for i in range(num_agents)]
-    single_trial_result.goal_state_pos_l = [goal_l[i].cpu().numpy().tolist() for i in range(num_agents)]
-    single_trial_result.global_model_ids = global_model_ids
-    single_trial_result.agent_skeleton_l = agent_skeleton_l
-
-    # ============================
-    # Save the results and config.
-    # ============================
-    # print(GREEN, single_trial_result, RESET)
     results_dir_uri = f'file://{os.path.abspath(results_dir)}'
     print('Results dir:', results_dir_uri)
-    single_trial_result.save(results_dir)
-    test_config.save(results_dir)
     paths_np = whole_trajs.cpu().numpy()
     with open(os.path.join(results_dir, 'paths.npy'), 'wb') as f:
         np.save(f, paths_np)
     # save map info
-    res_map_name = single_trial_result.trial_config.map_name
-    res_instance_idx = single_trial_result.trial_config.instance_idx
+    res_map_name = test_config.map_name
+    res_instance_idx = test_config.instance_idx
     with open(os.path.join(results_dir, 'map_info.pkl'), 'wb') as f:
         pickle.dump({'map_name': res_map_name, 'instance_idx': res_instance_idx}, f)
 
