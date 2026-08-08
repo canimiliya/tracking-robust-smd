@@ -70,3 +70,25 @@ the obstacle radius. Altitude is not used to hide the inherited 2D collision
 problem. S3 excludes motor first-order lag, aerodynamic drag, ground effect,
 sensor noise, wind, and mass mismatch. These omissions are recorded rather
 than presented as a complete high-fidelity model.
+
+## Projected SMD Position vs Diffusion Velocity State
+
+The official SMD trajectory state contains both position and velocity. In
+`smd/projection/projection.py`, simultaneous projection starts from
+`x_projected = copy(x_candidate)` and overwrites only each agent's `x,y`
+position dimensions. It does not recompute the retained diffusion velocity
+state. Therefore the raw velocity state is not guaranteed to be the derivative
+of the projected position.
+
+The SMD projected position is the authoritative physical execution geometry.
+Raw SMD velocity is preserved unchanged for S2 planning-metric parity, but it
+is not used as the physical derivative in S3. S3-R1 constructs
+`POSITION_DERIVED_VELOCITY` from projected-position knots using central
+differences at interior knots and zero at the start and goal hard-condition
+knots. Cubic Hermite interpolation then uses those derived velocities and its
+analytic acceleration. The SMD position support points are not moved, smoothed,
+retimed, or replanned.
+
+For `4.921875 <= t <= 5.0 s`, the final projected position is held with
+`v_ref = 0` and `a_ref = 0`. This prevents a held position from being paired
+with a nonzero derivative.

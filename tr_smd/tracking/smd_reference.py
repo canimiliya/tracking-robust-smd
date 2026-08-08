@@ -28,6 +28,24 @@ def finite_difference_velocity(position: np.ndarray, dt: float) -> np.ndarray:
     return velocity
 
 
+def position_derived_velocity(position: np.ndarray, dt: float) -> np.ndarray:
+    """Build knot velocities from projected positions only.
+
+    The SMD position projection does not guarantee that its retained diffusion
+    velocity state is the derivative of the projected position.  The physical
+    execution bridge therefore uses central differences at interior knots and
+    the trajectory hard-condition velocity (zero) at both endpoints.
+    """
+    position = np.asarray(position, dtype=np.float64)
+    if position.ndim != 3 or position.shape[1:] != (SMD_SUPPORT_POINTS, 2):
+        raise ValueError(f"expected (agents, support_points, 2), got {position.shape}")
+    if dt <= 0.0:
+        raise ValueError("dt must be positive")
+    velocity = np.zeros_like(position)
+    velocity[:, 1:-1] = (position[:, 2:] - position[:, :-2]) / (2.0 * dt)
+    return velocity
+
+
 def _primary_candidate(paths: np.ndarray, num_agents: int) -> tuple[np.ndarray, np.ndarray]:
     paths = np.asarray(paths)
     if paths.ndim != 3 or paths.shape[0] < 1 or paths.shape[1] != SMD_SUPPORT_POINTS:
@@ -123,6 +141,36 @@ class HermiteReference:
         return {
             "position_knot_max_error": float(max(p_errors)),
             "velocity_knot_max_error": float(max(v_errors)),
+        }
+
+
+class PositionConsistentHermiteReference(HermiteReference):
+    """Hermite reference whose physical derivatives come only from SMD positions.
+
+    ``raw_velocity_xy`` is retained as an audit/planning-metric field, but is
+    deliberately not used to construct the physical Hermite curve.
+    """
+
+    def __init__(
+        self,
+        position_xy: np.ndarray,
+        raw_velocity_xy: np.ndarray,
+        altitude: float = REFERENCE_ALTITUDE_M,
+    ):
+        position_xy = np.asarray(position_xy, dtype=np.float64)
+        raw_velocity_xy = np.asarray(raw_velocity_xy, dtype=np.float64)
+        if position_xy.shape != raw_velocity_xy.shape:
+            raise ValueError("position and raw velocity shapes must match")
+        derived_velocity_xy = position_derived_velocity(position_xy, SMD_REFERENCE_DT_S)
+        super().__init__(position_xy, derived_velocity_xy, altitude=altitude)
+        self.raw_velocity_xy = raw_velocity_xy
+        self.position_derived_velocity_xy = derived_velocity_xy.copy()
+
+    def raw_velocity_mismatch(self) -> dict:
+        mismatch = self.raw_velocity_xy - self.position_derived_velocity_xy
+        return {
+            "raw_velocity_mismatch_rmse": float(np.sqrt(np.mean(mismatch * mismatch))),
+            "raw_velocity_mismatch_max_error": float(np.max(np.abs(mismatch))),
         }
 
 

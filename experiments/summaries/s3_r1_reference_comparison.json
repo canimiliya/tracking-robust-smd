@@ -1,0 +1,58 @@
+{
+  "no_reference_selection_by_tracking": true,
+  "r0": {
+    "continuous_nominal_clearance_m": 0.083777500844337,
+    "max_acceleration_mps2": 27.570078738326757,
+    "max_speed_mps": 0.4571140416688582,
+    "p99_acceleration_mps2": 20.12510355735666,
+    "required_thrust_ratio": 1.325784521400588,
+    "required_tilt_deg": 70.41339732185725,
+    "tracking_metrics": {
+      "execution_geometric_collision_free": true,
+      "finite_state": true,
+      "max_quaternion_norm_error": 2.220446049250313e-16,
+      "max_speed_mps": 0.5672583628033071,
+      "max_tilt_deg": 30.67673502511937,
+      "max_xy_error_all_agents_m": 0.10764344523313567,
+      "mean_xy_rmse_m": 0.027994756572505247,
+      "min_actual_inter_agent_clearance_m": 0.10275824562116825,
+      "min_actual_inter_agent_distance_m": 0.20275824562116826,
+      "min_actual_obstacle_clearance_m": 0.029761932533910615,
+      "per_agent_final_xy_error_m": [
+        0.019658642890481984,
+        0.005017990000179212,
+        0.012465797288211596
+      ],
+      "per_agent_xy_max_error_m": [
+        0.058610501176523964,
+        0.10764344523313567,
+        0.04891337112084475
+      ],
+      "per_agent_xy_rmse_m": [
+        0.02931567424801987,
+        0.03335773288116731,
+        0.02131086258832856
+      ],
+      "rotor_saturation_fraction": 0.0064974010395841665,
+      "z_max_error_m": 0.04464139966157454,
+      "z_rmse_m": 0.02453234169277586
+    },
+    "velocity_consistency_max_error": 0.3510340690612793,
+    "velocity_consistency_rmse": 0.15395999853895792
+  },
+  "r1": {
+    "continuous_nominal_clearance_m": 0.0862374644468745,
+    "max_reference_acceleration_mps2": 11.398280335936331,
+    "max_reference_speed_mps": 0.4548079169080577,
+    "max_required_thrust_ratio": 0.6813235342782609,
+    "max_required_tilt_deg": 49.28286509834608,
+    "max_required_total_thrust_n": 0.40603987017963666,
+    "p99_reference_acceleration_mps2": 4.588104193585213,
+    "raw_velocity_mismatch": {
+      "raw_velocity_mismatch_max_error": 0.3510340690612793,
+      "raw_velocity_mismatch_rmse": 0.15337751749231698
+    },
+    "reference_thrust_feasible": true
+  },
+  "reference_contract": "R0 raw-velocity Hermite vs R1 projected-position-derived Hermite"
+}

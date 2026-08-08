@@ -1,0 +1,356 @@
+{
+  "all_agents_completed": true,
+  "branch": "feat/closed-loop-dynamics",
+  "controller_config_sha256_after": "38F8C62CD39A86A49995DD110B16141AE8B285102332578F11D155A3E9451677",
+  "controller_config_sha256_before": "38F8C62CD39A86A49995DD110B16141AE8B285102332578F11D155A3E9451677",
+  "controller_gain_change": false,
+  "controller_revision_count": 3,
+  "epsilon_s": 1e-06,
+  "figures": [
+    "D:\\Desktop\\my_project\\TR-SMD\\experiments\\figures\\s3_r1_nominal_vs_actual_3agent.png",
+    "D:\\Desktop\\my_project\\TR-SMD\\experiments\\figures\\s3_r1_tracking_error_vs_time.png",
+    "D:\\Desktop\\my_project\\TR-SMD\\experiments\\figures\\s3_r1_reference_acceleration.png",
+    "D:\\Desktop\\my_project\\TR-SMD\\experiments\\figures\\s3_r1_control_saturation.png"
+  ],
+  "final_label": "S3_R1_PROJECTED_REFERENCE_CONSISTENCY_READY",
+  "git_head": "5a9b80840e719f189a00bc5803e4ab5f4a9ce4cf",
+  "initial_position_mismatch": 0.0,
+  "initial_velocity_mismatch": 0.0,
+  "max_reference_to_polyline_deviation_m": 0.0021453417908650373,
+  "official_projection_audit": {
+    "projection_modifies_position": true,
+    "projection_recomputes_velocity": false,
+    "raw_velocity_state_is_derivative_of_projected_position": "NOT GUARANTEED",
+    "source": "smd/projection/projection.py",
+    "x_projected": "copy(x_candidate)"
+  },
+  "position_knot_max_error": 0.0,
+  "primary_raw_goal_velocity": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      5.960464477539063e-08
+    ]
+  ],
+  "primary_raw_start_velocity": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      5.960464477539063e-08
+    ]
+  ],
+  "r0_velocity_consistency_max_error": 0.3510340690612793,
+  "r0_velocity_consistency_rmse": 0.15395999853895792,
+  "r0_vs_r1_comparison_csv": "D:\\Desktop\\my_project\\TR-SMD\\experiments\\summaries\\s3_r0_vs_r1_tracking_comparison.csv",
+  "r0_vs_r1_comparison_json": "D:\\Desktop\\my_project\\TR-SMD\\experiments\\summaries\\s3_r1_reference_comparison.json",
+  "raw_artifact": "D:\\Desktop\\my_project\\TR-SMD\\experiments\\raw\\s3_r1_closed_loop_3agent.npz",
+  "raw_artifact_sha256": "7D06681D126CE615A68E109C68440414008E73195695BF767498DC179F3010B7",
+  "reference_derivative_source": "position-derived velocity from projected positions; analytic Hermite acceleration",
+  "reference_dpdt_v_error_max": 1.1626120205443513e-10,
+  "reference_dt": 0.078125,
+  "reference_dvdt_a_error_max": 1.7032662502636242e-09,
+  "reference_dynamic_demand": {
+    "max_reference_acceleration_mps2": 11.398280335936331,
+    "max_reference_speed_mps": 0.4548079169080577,
+    "max_required_thrust_ratio": 0.6813235342782609,
+    "max_required_tilt_deg": 49.28286509834608,
+    "max_required_total_thrust_n": 0.40603987017963666,
+    "p99_reference_acceleration_mps2": 4.588104193585213,
+    "reference_thrust_feasible": true
+  },
+  "reference_geometry": {
+    "min_reference_inter_agent_clearance_m": 0.0862374644468745,
+    "min_reference_inter_agent_distance_m": 0.1862374644468745,
+    "min_reference_obstacle_clearance_m": 0.024229648852440708,
+    "reference_geometric_collision_free": true,
+    "reference_geometry_sample_dt_s": 0.002
+  },
+  "reference_geometry_authority": "SMD projected position",
+  "reference_span": 4.921875,
+  "scope": {
+    "controller_tuning": false,
+    "mass_mismatch": false,
+    "s4_started": false,
+    "wind": false
+  },
+  "smd_closed_loop_r1": true,
+  "source_paths_sha256": "76024E724A2F51E4891B6EEC602E2DA060DEAD504AC23BC5C89D6F9020BB53FB",
+  "status": "SUBMITTED_FOR_REVIEW",
+  "synthetic_regression": {
+    "hover": {
+      "execution_geometric_collision_free": true,
+      "final_xy_error_m": 1.0997507072249287e-17,
+      "finite_state": true,
+      "max_quaternion_norm_error": 0.0,
+      "max_speed_mps": 1.2506405005023976e-16,
+      "max_tilt_deg": 0.0,
+      "max_xy_error_all_agents_m": 1.1738446421198119e-17,
+      "mean_xy_rmse_m": 9.137168317805575e-18,
+      "min_actual_inter_agent_clearance_m": null,
+      "min_actual_inter_agent_distance_m": null,
+      "min_actual_obstacle_clearance_m": null,
+      "pass": true,
+      "per_agent_final_xy_error_m": [
+        1.0997507072249287e-17
+      ],
+      "per_agent_xy_max_error_m": [
+        1.1738446421198119e-17
+      ],
+      "per_agent_xy_rmse_m": [
+        9.137168317805575e-18
+      ],
+      "rotor_saturation_fraction": 0.0,
+      "z_max_error_m": 0.0,
+      "z_rmse_m": 0.0
+    },
+    "setpoint_x": {
+      "execution_geometric_collision_free": true,
+      "final_xy_error_m": 5.707962970197267e-07,
+      "finite_state": true,
+      "max_quaternion_norm_error": 1.1102230246251565e-16,
+      "max_speed_mps": 0.16953356028929673,
+      "max_tilt_deg": 6.785604053829253,
+      "max_xy_error_all_agents_m": 0.1,
+      "mean_xy_rmse_m": 0.027069157972469712,
+      "min_actual_inter_agent_clearance_m": null,
+      "min_actual_inter_agent_distance_m": null,
+      "min_actual_obstacle_clearance_m": null,
+      "pass": true,
+      "per_agent_final_xy_error_m": [
+        5.707962970197267e-07
+      ],
+      "per_agent_xy_max_error_m": [
+        0.1
+      ],
+      "per_agent_xy_rmse_m": [
+        0.027069157972469712
+      ],
+      "rotor_saturation_fraction": 0.0,
+      "z_max_error_m": 0.0006105766676006708,
+      "z_rmse_m": 0.0001973202344315458
+    },
+    "setpoint_y": {
+      "execution_geometric_collision_free": true,
+      "final_xy_error_m": 5.707962970336045e-07,
+      "finite_state": true,
+      "max_quaternion_norm_error": 1.1102230246251565e-16,
+      "max_speed_mps": 0.16953356028929673,
+      "max_tilt_deg": 6.785604053829253,
+      "max_xy_error_all_agents_m": 0.1,
+      "mean_xy_rmse_m": 0.027069157972469716,
+      "min_actual_inter_agent_clearance_m": null,
+      "min_actual_inter_agent_distance_m": null,
+      "min_actual_obstacle_clearance_m": null,
+      "pass": true,
+      "per_agent_final_xy_error_m": [
+        5.707962970336045e-07
+      ],
+      "per_agent_xy_max_error_m": [
+        0.1
+      ],
+      "per_agent_xy_rmse_m": [
+        0.027069157972469716
+      ],
+      "rotor_saturation_fraction": 0.0,
+      "z_max_error_m": 0.0006105766676006708,
+      "z_rmse_m": 0.00019732023443154757
+    }
+  },
+  "systemic_position_velocity_inconsistency": true,
+  "task_id": "S3-R1-PROJECTED-REFERENCE-DERIVATIVE-CONSISTENCY-REPAIR-R1",
+  "terminal_hold": {
+    "a_final_hold": true,
+    "p_final_hold": true,
+    "v_final_hold": true
+  },
+  "tracking_gate": {
+    "all_agents_completed": true,
+    "each_agent_final_xy_error": true,
+    "each_agent_xy_rmse": true,
+    "execution_geometric_collision_free": true,
+    "finite_state": true,
+    "max_tilt": true,
+    "max_xy_error": true,
+    "mean_xy_rmse": true,
+    "rotor_saturation": true,
+    "tracking_gate_pass": true,
+    "z_rmse": true
+  },
+  "tracking_metrics": {
+    "execution_geometric_collision_free": true,
+    "finite_state": true,
+    "max_quaternion_norm_error": 2.220446049250313e-16,
+    "max_speed_mps": 0.5433735313945465,
+    "max_tilt_deg": 27.692595762720078,
+    "max_xy_error_all_agents_m": 0.026932576189519285,
+    "mean_xy_rmse_m": 0.004417622834878108,
+    "min_actual_inter_agent_clearance_m": 0.08311790220589899,
+    "min_actual_inter_agent_distance_m": 0.183117902205899,
+    "min_actual_obstacle_clearance_m": 0.02495461132728609,
+    "per_agent_final_xy_error_m": [
+      0.007894143929666276,
+      0.00933554268195741,
+      0.007627778272696861
+    ],
+    "per_agent_xy_max_error_m": [
+      0.008847721830440644,
+      0.01942825982178384,
+      0.026932576189519285
+    ],
+    "per_agent_xy_rmse_m": [
+      0.002688047029760201,
+      0.0043086141494928926,
+      0.006256207325381231
+    ],
+    "rotor_saturation_fraction": 0.0,
+    "z_max_error_m": 0.03595904590193366,
+    "z_rmse_m": 0.007891901734266044
+  },
+  "velocity_audit": {
+    "csv": "D:\\Desktop\\my_project\\TR-SMD\\experiments\\summaries\\s3_r1_velocity_semantics_audit.csv",
+    "rows": [
+      {
+        "instance_idx": 0,
+        "map_name": "instances_simple",
+        "num_agents": 3,
+        "paths_file": "D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s1_r0_3agent\\2026-08-08-20-09-42\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0\\paths.npy",
+        "paths_sha256": "76024E724A2F51E4891B6EEC602E2DA060DEAD504AC23BC5C89D6F9020BB53FB",
+        "position_derived_velocity_mismatch_max_error": 0.3510340690612793,
+        "position_derived_velocity_mismatch_rmse": 0.15337751749231698,
+        "raw_velocity_endpoint_goal_norm": 5.960464477539063e-08,
+        "raw_velocity_endpoint_start_norm": 5.960464477539063e-08,
+        "raw_velocity_vs_position_fd_max_error": 0.3510340690612793,
+        "raw_velocity_vs_position_fd_rmse": 0.15395999853895792,
+        "run_id": "simple_3_idx0_s1r0"
+      },
+      {
+        "instance_idx": 0,
+        "map_name": "instances_simple",
+        "num_agents": 6,
+        "paths_file": "D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s1_r1_core\\2026-08-08-20-22-07\\instance_name___EnvEmptyNoWait2DRobotCompositeSixPlanarDiskRandom\\num_agents___6\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0\\paths.npy",
+        "paths_sha256": "5CDE01820AFDC003E6B142234360889C03FE4B72FCC5B2AA0149D8615FD6FAEB",
+        "position_derived_velocity_mismatch_max_error": 0.8710241436958313,
+        "position_derived_velocity_mismatch_rmse": 0.333186713534964,
+        "raw_velocity_endpoint_goal_norm": 8.429369702178807e-08,
+        "raw_velocity_endpoint_start_norm": 8.429369702178807e-08,
+        "raw_velocity_vs_position_fd_max_error": 0.8710241436958313,
+        "raw_velocity_vs_position_fd_rmse": 0.33462230730367587,
+        "run_id": "simple_6_idx0_20260808T202207"
+      },
+      {
+        "instance_idx": 0,
+        "map_name": "instances_simple",
+        "num_agents": 9,
+        "paths_file": "D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s1_r1_core\\2026-08-08-20-26-01\\instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom\\num_agents___9\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0\\paths.npy",
+        "paths_sha256": "0356055F250D78ED0F927B48252F324164884D710635243E317840580146C449",
+        "position_derived_velocity_mismatch_max_error": 1.5305871486663818,
+        "position_derived_velocity_mismatch_rmse": 0.5089115036109244,
+        "raw_velocity_endpoint_goal_norm": 8.429369702178807e-08,
+        "raw_velocity_endpoint_start_norm": 8.429369702178807e-08,
+        "raw_velocity_vs_position_fd_max_error": 1.5305871486663818,
+        "raw_velocity_vs_position_fd_rmse": 0.5118999202817961,
+        "run_id": "simple_9_idx0_20260808T202601"
+      },
+      {
+        "instance_idx": 0,
+        "map_name": "instances_dense",
+        "num_agents": 3,
+        "paths_file": "D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s1_r1_core\\2026-08-08-20-36-35\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0\\paths.npy",
+        "paths_sha256": "0838D68A193A61D5C81C56BDC79B1BDFFD2BDCD3DEB4856ED38D8164611CC83F",
+        "position_derived_velocity_mismatch_max_error": 0.3124637961387634,
+        "position_derived_velocity_mismatch_rmse": 0.14874402566210607,
+        "raw_velocity_endpoint_goal_norm": 5.960464477539063e-08,
+        "raw_velocity_endpoint_start_norm": 5.960464477539063e-08,
+        "raw_velocity_vs_position_fd_max_error": 0.3124637961387634,
+        "raw_velocity_vs_position_fd_rmse": 0.14921212404423972,
+        "run_id": "dense_3_idx0_20260808T203635"
+      },
+      {
+        "instance_idx": 0,
+        "map_name": "instances_dense",
+        "num_agents": 6,
+        "paths_file": "D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s1_r1_core_retry\\2026-08-08-21-38-37\\instance_name___EnvEmptyNoWait2DRobotCompositeSixPlanarDiskRandom\\num_agents___6\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0\\paths.npy",
+        "paths_sha256": "987A02E9F649BF65BAF15B482EB449B187C8BB43B1D69C1A905209C001DF90A0",
+        "position_derived_velocity_mismatch_max_error": 1.3956506729125977,
+        "position_derived_velocity_mismatch_rmse": 0.42996115945214775,
+        "raw_velocity_endpoint_goal_norm": 8.429369702178807e-08,
+        "raw_velocity_endpoint_start_norm": 8.429369702178807e-08,
+        "raw_velocity_vs_position_fd_max_error": 1.3956506729125977,
+        "raw_velocity_vs_position_fd_rmse": 0.43390924376899426,
+        "run_id": "dense_6_idx0_20260808T213837_retry"
+      },
+      {
+        "instance_idx": 0,
+        "map_name": "instances_dense",
+        "num_agents": 9,
+        "paths_file": "D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s1_r1_core_retry\\2026-08-08-21-50-11\\instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom\\num_agents___9\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0\\paths.npy",
+        "paths_sha256": "0CEB8562E06A179E8E378DB52479F275D438AC58F7A9223EC0422A746B956F40",
+        "position_derived_velocity_mismatch_max_error": 1.5298173546791076,
+        "position_derived_velocity_mismatch_rmse": 0.5510052399663603,
+        "raw_velocity_endpoint_goal_norm": 8.429369702178807e-08,
+        "raw_velocity_endpoint_start_norm": 8.429369702178807e-08,
+        "raw_velocity_vs_position_fd_max_error": 1.5298173546791076,
+        "raw_velocity_vs_position_fd_rmse": 0.5548518373027814,
+        "run_id": "dense_9_idx0_20260808T215011_retry"
+      },
+      {
+        "instance_idx": 0,
+        "map_name": "instances_connected_room",
+        "num_agents": 3,
+        "paths_file": "D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s1_r1_core\\2026-08-08-21-03-17\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0\\paths.npy",
+        "paths_sha256": "32D5CCA77654E17582E6FE359C92F3F5B394D64E45002469415C1CB004E38E3C",
+        "position_derived_velocity_mismatch_max_error": 0.5828720211982727,
+        "position_derived_velocity_mismatch_rmse": 0.18755618401361632,
+        "raw_velocity_endpoint_goal_norm": 5.960464477539063e-08,
+        "raw_velocity_endpoint_start_norm": 5.960464477539063e-08,
+        "raw_velocity_vs_position_fd_max_error": 0.5828720211982727,
+        "raw_velocity_vs_position_fd_rmse": 0.18881299543036537,
+        "run_id": "connected_room_3_idx0_20260808T210317"
+      },
+      {
+        "instance_idx": 0,
+        "map_name": "instances_connected_room",
+        "num_agents": 6,
+        "paths_file": "D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s1_r1_core\\2026-08-08-21-05-00\\instance_name___EnvEmptyNoWait2DRobotCompositeSixPlanarDiskRandom\\num_agents___6\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0\\paths.npy",
+        "paths_sha256": "68C350812778DC19D5762F5056905D205C3FD4494392379F8264B883263B66AC",
+        "position_derived_velocity_mismatch_max_error": 1.200817084312439,
+        "position_derived_velocity_mismatch_rmse": 0.3888739500459827,
+        "raw_velocity_endpoint_goal_norm": 8.429369702178807e-08,
+        "raw_velocity_endpoint_start_norm": 8.429369702178807e-08,
+        "raw_velocity_vs_position_fd_max_error": 1.200817084312439,
+        "raw_velocity_vs_position_fd_rmse": 0.3918387608019074,
+        "run_id": "connected_room_6_idx0_20260808T210500"
+      },
+      {
+        "instance_idx": 0,
+        "map_name": "instances_connected_room",
+        "num_agents": 9,
+        "paths_file": "D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s1_r1_core\\2026-08-08-21-12-20\\instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom\\num_agents___9\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0\\paths.npy",
+        "paths_sha256": "F372C53594D40C3B841FBB2A53A55702D89655ECF261624235A0B0EB98E79927",
+        "position_derived_velocity_mismatch_max_error": 1.4322445511817932,
+        "position_derived_velocity_mismatch_rmse": 0.4739796767079687,
+        "raw_velocity_endpoint_goal_norm": 8.429369702178807e-08,
+        "raw_velocity_endpoint_start_norm": 8.429369702178807e-08,
+        "raw_velocity_vs_position_fd_max_error": 1.4322445511817932,
+        "raw_velocity_vs_position_fd_rmse": 0.47766261762453033,
+        "run_id": "connected_room_9_idx0_20260808T211220"
+      }
+    ]
+  },
+  "velocity_audit_run_count": 9,
+  "velocity_knot_max_error": 0.0
+}
