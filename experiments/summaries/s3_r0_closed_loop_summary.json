@@ -1,0 +1,226 @@
+{
+  "control_dt": 0.01,
+  "controller_parameters": {
+    "angular_rate_gains": [
+      0.0003,
+      0.0003,
+      0.00015
+    ],
+    "attitude_gains": [
+      0.006,
+      0.006,
+      0.003
+    ],
+    "config_frozen": true,
+    "position_gains": [
+      12.0,
+      12.0,
+      14.0
+    ],
+    "reference_altitude": 1.0,
+    "reference_yaw": 0.0,
+    "revision_count": 3,
+    "velocity_gains": [
+      7.0,
+      7.0,
+      8.0
+    ]
+  },
+  "disk_after_gb": 189.806,
+  "disk_before_gb": 189.808,
+  "disk_delta_gb": -0.002,
+  "dynamics_dt": 0.002,
+  "execution_collision_free": true,
+  "figures": [
+    "D:\\Desktop\\my_project\\TR-SMD\\experiments\\figures\\s3_r0_nominal_vs_actual_3agent.png",
+    "D:\\Desktop\\my_project\\TR-SMD\\experiments\\figures\\s3_r0_tracking_error_vs_time.png",
+    "D:\\Desktop\\my_project\\TR-SMD\\experiments\\figures\\s3_r0_control_saturation.png"
+  ],
+  "final_label": "BLOCKED_S3_R0_CLOSED_LOOP_QUADROTOR_BRIDGE",
+  "git_head": "85832058d02589fd19b0371ad2f5dfa24942d471",
+  "hover_test": {
+    "execution_geometric_collision_free": true,
+    "finite_state": true,
+    "max_quaternion_norm_error": 0.0,
+    "max_speed_mps": 1.628101315998094e-16,
+    "max_tilt_deg": 0.0,
+    "max_xy_error_all_agents_m": 7.815206006986439e-17,
+    "mean_xy_rmse_m": 7.012430723114536e-17,
+    "min_actual_inter_agent_clearance_m": null,
+    "min_actual_inter_agent_distance_m": null,
+    "min_actual_obstacle_clearance_m": null,
+    "per_agent_final_xy_error_m": [
+      7.786037909567153e-17
+    ],
+    "per_agent_xy_max_error_m": [
+      7.815206006986439e-17
+    ],
+    "per_agent_xy_rmse_m": [
+      7.012430723114536e-17
+    ],
+    "rotor_saturation_fraction": 0.0,
+    "settling_error_m": 7.786037909567153e-17,
+    "settling_time_s": 0.0,
+    "z_max_error_m": 0.0,
+    "z_rmse_m": 0.0
+  },
+  "integrator": "fixed_step_RK4",
+  "interpolation": {
+    "position_knot_max_error": 0.0,
+    "velocity_knot_max_error": 0.0
+  },
+  "model_parameters": {
+    "arm": 0.0397,
+    "inertia": [
+      1.4e-05,
+      1.4e-05,
+      2.17e-05
+    ],
+    "kf": 3.16e-10,
+    "km": 7.94e-12,
+    "mass": 0.027,
+    "rotor_max_thrust": 0.148989375,
+    "rotor_positions": [
+      [
+        0.028,
+        -0.028,
+        0.0
+      ],
+      [
+        -0.028,
+        -0.028,
+        0.0
+      ],
+      [
+        -0.028,
+        0.028,
+        0.0
+      ],
+      [
+        0.028,
+        0.028,
+        0.0
+      ]
+    ],
+    "source": "learnsyslab/gym-pybullet-drones::gym_pybullet_drones/assets/cf2x.urdf",
+    "source_commit": "e712698a05a80728b06572819dcf044596707754",
+    "thrust_to_weight": 2.25,
+    "yaw_signs": [
+      -1.0,
+      1.0,
+      -1.0,
+      1.0
+    ]
+  },
+  "raw_artifact": "D:\\Desktop\\my_project\\TR-SMD\\experiments\\raw\\s3_r0_closed_loop_3agent.npz",
+  "raw_artifact_sha256": "941D495BE60896AD3035BB46ACA73B09E9C66B5FC349FAC7C796957D84996B68",
+  "reference_dt": 0.078125,
+  "reference_span": 4.921875,
+  "rotor_allocation_rank": 4,
+  "s3_gate": {
+    "all_agents_completed": true,
+    "each_agent_final_xy_error_pass": true,
+    "each_agent_xy_rmse_pass": false,
+    "execution_geometric_collision_free": true,
+    "finite_state": true,
+    "max_tilt_pass": true,
+    "max_xy_error_pass": false,
+    "mean_xy_rmse_pass": false,
+    "rotor_saturation_pass": true,
+    "tracking_gate_pass": false,
+    "z_rmse_pass": false
+  },
+  "setpoint_tests": {
+    "x_plus_0.10_m": {
+      "execution_geometric_collision_free": true,
+      "finite_state": true,
+      "max_quaternion_norm_error": 1.1102230246251565e-16,
+      "max_speed_mps": 0.16953356028929678,
+      "max_tilt_deg": 6.785604053829253,
+      "max_xy_error_all_agents_m": 0.1,
+      "mean_xy_rmse_m": 0.027069157972469712,
+      "min_actual_inter_agent_clearance_m": null,
+      "min_actual_inter_agent_distance_m": null,
+      "min_actual_obstacle_clearance_m": null,
+      "per_agent_final_xy_error_m": [
+        5.707962970058489e-07
+      ],
+      "per_agent_xy_max_error_m": [
+        0.1
+      ],
+      "per_agent_xy_rmse_m": [
+        0.027069157972469712
+      ],
+      "rotor_saturation_fraction": 0.0,
+      "settling_error_m": 5.707962970058489e-07,
+      "settling_time_s": 0.846,
+      "z_max_error_m": 0.0006105766676006708,
+      "z_rmse_m": 0.0001973202344315458
+    },
+    "y_plus_0.10_m": {
+      "execution_geometric_collision_free": true,
+      "finite_state": true,
+      "max_quaternion_norm_error": 1.1102230246251565e-16,
+      "max_speed_mps": 0.16953356028929675,
+      "max_tilt_deg": 6.785604053829253,
+      "max_xy_error_all_agents_m": 0.1,
+      "mean_xy_rmse_m": 0.027069157972469716,
+      "min_actual_inter_agent_clearance_m": null,
+      "min_actual_inter_agent_distance_m": null,
+      "min_actual_obstacle_clearance_m": null,
+      "per_agent_final_xy_error_m": [
+        5.707962970197267e-07
+      ],
+      "per_agent_xy_max_error_m": [
+        0.1
+      ],
+      "per_agent_xy_rmse_m": [
+        0.027069157972469716
+      ],
+      "rotor_saturation_fraction": 0.0,
+      "settling_error_m": 5.707962970197267e-07,
+      "settling_time_s": 0.846,
+      "z_max_error_m": 0.0006105766676006708,
+      "z_rmse_m": 0.00019732023443156874
+    }
+  },
+  "source_paths_sha256": "76024E724A2F51E4891B6EEC602E2DA060DEAD504AC23BC5C89D6F9020BB53FB",
+  "source_smd_run": "simple_3_idx0_s1r0",
+  "state_dim": 13,
+  "status": "BLOCKED",
+  "support_points": 64,
+  "task_id": "S3-R0-CLOSED-LOOP-QUADROTOR-DYNAMICS-BRIDGE-R1",
+  "tracking_metrics": {
+    "execution_geometric_collision_free": true,
+    "finite_state": true,
+    "max_quaternion_norm_error": 2.220446049250313e-16,
+    "max_speed_mps": 0.5672583628033071,
+    "max_tilt_deg": 30.67673502511937,
+    "max_xy_error_all_agents_m": 0.10764344523313567,
+    "mean_xy_rmse_m": 0.027994756572505247,
+    "min_actual_inter_agent_clearance_m": 0.10275824562116825,
+    "min_actual_inter_agent_distance_m": 0.20275824562116826,
+    "min_actual_obstacle_clearance_m": 0.029761932533910615,
+    "per_agent_final_xy_error_m": [
+      0.019658642890481984,
+      0.005017990000179212,
+      0.012465797288211596
+    ],
+    "per_agent_xy_max_error_m": [
+      0.058610501176523964,
+      0.10764344523313567,
+      0.04891337112084475
+    ],
+    "per_agent_xy_rmse_m": [
+      0.02931567424801987,
+      0.03335773288116731,
+      0.02131086258832856
+    ],
+    "rotor_saturation_fraction": 0.0064974010395841665,
+    "z_max_error_m": 0.04464139966157454,
+    "z_rmse_m": 0.02453234169277586
+  },
+  "trajectory_duration": 5.0,
+  "velocity_consistency_max_error": 0.3510340690612793,
+  "velocity_consistency_rmse": 0.15395999853895792
+}
