@@ -1,0 +1,39 @@
+{
+  "task_id": "S3-R0-CLOSED-LOOP-QUADROTOR-DYNAMICS-BRIDGE-R1",
+  "stage": "S3",
+  "branch": "feat/closed-loop-dynamics",
+  "s2_main_integration": "ff-only",
+  "s2_ready_head": "849d1fa2de5c564ad86caaba050319c35297986b",
+  "official_upstream_head": "c87fc76044b350a37fcea7afc468c13c8371a237",
+  "reference": {
+    "map_name": "instances_simple",
+    "instance_idx": 0,
+    "num_agents": 3,
+    "candidate_index": 0,
+    "support_points": 64,
+    "trajectory_duration_s": 5.0,
+    "reference_dt_s": 0.078125,
+    "reference_span_s": 4.921875,
+    "lift_altitude_m": 1.0,
+    "source_paths_sha256": "76024E724A2F51E4891B6EEC602E2DA060DEAD504AC23BC5C89D6F9020BB53FB"
+  },
+  "dynamics": {
+    "state_dim": 13,
+    "dynamics_dt_s": 0.002,
+    "control_dt_s": 0.01,
+    "integrator": "fixed_step_RK4",
+    "external_force": false,
+    "external_moment": false
+  },
+  "collision": {
+    "robot_safety_radius_m": 0.05,
+    "check_every_dynamics_step": true,
+    "geometry": "XY"
+  },
+  "controller": {
+    "revision_count": 3,
+    "config_frozen": true,
+    "synthetic_only_gain_audit": true
+  },
+  "scope_exclusions": ["wind", "gust", "mass_mismatch", "aerodynamic_drag", "motor_first_order_lag", "ground_effect", "sensor_noise", "robust_planning", "diffusion_retraining"]
+}
