@@ -121,3 +121,48 @@ This bootstrap is BLOCKED, not ready. The official Git history, remotes, branch,
 - The existing 609486811-byte checkpoint archive and extracted data were reused; no duplicate checkpoint, clone, WSL2 distro, Docker image, CUDA Toolkit, video, or benchmark trajectory set was created.
 - Evidence manifests: `experiments/manifests/system_manifest_s0_r1.txt`, `pip_freeze_s0_r1.txt`, `conda_list_s0_r1.txt`, `requirements_s0_blackwell_compat.txt`, and `gpu_smoke_s0_r1.txt`.
 - This remediation remains limited to S0. No S1 benchmark, multi-map, multi-seed, 6/9-agent study, training, tuning, TR-SMD innovation, or paper experiment was started.
+
+## S1-R0 Official SMD 3-Agent Functional Reproduction
+
+- TASK_ID: `S1-R0-OFFICIAL-SMD-3AGENT-FUNCTIONAL-REPRODUCTION-R1`
+- S0 closeout: `fix/s0-native-blackwell-compat` was fast-forwarded into `repro/smd-official`, then into `main`; both remote branches resolve to `caec78dddc2b1e04b3ad4385928d178a9076fd2e`. GitHub default branch was restored to `main`.
+- S1 branch: `repro/s1-smd-functional`, starting at `main@caec78dddc2b1e04b3ad4385928d178a9076fd2e`.
+- Official upstream head: `c87fc76044b350a37fcea7afc468c13c8371a237`; baseline tag: `smd-official-import`.
+
+### S0 compatibility evidence versus S1 functional evidence
+
+- S0 established the native Blackwell compatibility delta: Python 3.9.25, torch 2.7.1+cu128, torchvision 0.22.1+cu128, torchaudio 2.7.1+cu128, networkx 2.8.8, and RTX 5060 Ti capability `(12, 0)`. This remains explicitly distinct from the official Python 3.8/Torch 2.1.2 attempt.
+- S1-R0 used the existing S0 `smd-blackwell` environment and did not download or modify checkpoint/data archives.
+- `git diff smd-official-import -- smd` and `git diff smd-official-import -- deps` were empty. The entrypoint diff contained only the three previously approved `map_name` to `args.map_name` variable-binding fixes.
+
+### Environment, data, and checkpoint gates
+
+- `PYTHON=3.9.25`, `TORCH=2.7.1+cu128`, `TORCH_CUDA=12.8`, `GPU=NVIDIA GeForce RTX 5060 Ti`, `CAPABILITY=(12, 0)`, `CUDA_AVAILABLE=True`, `IPOPT_STATUS=True`.
+- GPU tensor sanity test passed before inference.
+- `instances_data/instances_simple.pkl` exists with 250 instances; `init4proj_data/instances_simple_init4proj_agent_3.pkl` exists with 250 entries; the three-agent checkpoint directory exists under `data_trained_models/EnvEmptyNoWait2D-RobotCompositeThreePlanarDisk/checkpoints/`.
+- Existing `data_checkpoints.tar.gz` SHA-256 remains `5FB165686FA55E8955D842FA167B52ACD93A03AA513CD60787FEDF877B51689B`.
+
+### Official 3-agent functional run
+
+- Command: `conda run --no-capture-output -n smd-blackwell python launch_smd_composite_experiment.py --start_index 0 --end_index 1 --map_name instances_simple --save_path results_s1_r0_3agent` from `scripts/inference`.
+- Fixed selection: `instances_simple`, instance index `0`, `EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom`, 3 agents, `SMDComposite`, `SMDEnsemble`, official default planner/projection/checkpoint parameters.
+- The log proves trajectory dataset loading (`n_trajs: 1000`, `trajectory_dim: (64, 12)`), model channel construction, CUDA start/goal tensors on `cuda:0`, projection at steps 15/5/0 with 29 ALM iterations at step 15, and result serialization. Runtime was `29.363261222839355` seconds.
+- `paths.npy`: shape `(64, 64, 12)`, dtype `float32`, SHA-256 `76024E724A2F51E4891B6EEC602E2DA060DEAD504AC23BC5C89D6F9020BB53FB`, all finite.
+- `map_info.pkl`: SHA-256 `0EB1AD3F2261B225F4DA75F94C3F78630587DCB286218F09EBC048D574AB2CD8`.
+- Official output positions were parsed without editing raw data to `(3, 64, 2)`.
+
+### Provisional collision and sanity checks
+
+- `scripts/reproduction/check_smd_3agent_smoke.py` is a reproduction-only wrapper. It selects the three-agent map record and extracts the exact `is_collision.py::check_paths_ok` function body via AST so the official script's hard-coded nine-agent top-level scan is not executed. It does not alter paths, radius, threshold, or collision logic.
+- Collision parameters were fixed at `robot_radius=0.05` and `threshold=1e-3`, matching the official checker.
+- `COLLISION_FREE=True`; minimum inter-agent center distance was `0.18660226464271545 m`; provisional minimum obstacle clearance was `0.02442402451804533 m`.
+- Start position errors per agent: `[5.960464477539063e-08, 0.0, 1.6858739410245458e-08] m`.
+- Goal position errors per agent: `[4.915124922919302e-08, 2.665600744884954e-08, 2.384185793236071e-08] m`.
+
+### Reproduction artifacts and scope
+
+- Raw result directory: `scripts/inference/results_s1_r0_3agent/2026-08-08-20-09-42/`.
+- Summary: `experiments/summaries/s1_r0_3agent_smoke_summary.json`.
+- Evidence figure: `experiments/figures/s1_r0_smd_3agent_instances_simple_idx0.png`; SHA-256 `77CD17151AECDF34439A1D562EBB626A902486CA10D274EC79EC677DF87A580C`.
+- Disk: `FREE_DISK_SPACE_BEFORE_GB=191.4`, `FREE_DISK_SPACE_AFTER_GB=191.15`, `DISK_DELTA_GB=-0.25`; no duplicate checkpoint/data, WSL2, Docker, CUDA Toolkit, benchmark, or extra agent run was created.
+- This section is S1-R0 functional reproduction evidence only. It is not a paper metric pipeline, S1 closeout, multi-map benchmark, 6/9-agent run, tuning, or TR-SMD experiment.
