@@ -30,18 +30,19 @@
   "matrix_total": 9,
   "matrix_reused": 1,
   "matrix_new": 8,
+  "prior_failed_attempts_preserved_count": 2,
   "run_counts": {
     "3_agent_runs": 3,
     "6_agent_runs": 3,
     "9_agent_runs": 3
   },
-  "execution_completed_count": 7,
-  "execution_failed_count": 2,
-  "finite_path_pass_count": 7,
+  "execution_completed_count": 9,
+  "execution_failed_count": 0,
+  "finite_path_pass_count": 9,
   "finite_path_fail_count": 0,
-  "finite_path_not_available_count": 2,
-  "collision_check_count": 7,
-  "collision_free_count": 7,
+  "finite_path_not_available_count": 0,
+  "collision_check_count": 9,
+  "collision_free_count": 9,
   "collision_count": 0,
   "checkpoint": {
     "status": "AVAILABLE_AND_UNMODIFIED",
@@ -65,8 +66,8 @@
     "simple_6_idx0_20260808T202207",
     "simple_9_idx0_20260808T202601",
     "dense_3_idx0_20260808T203635",
-    "dense_6_idx0_20260808T203732",
-    "dense_9_idx0_20260808T204759",
+    "dense_6_idx0_20260808T213837_retry",
+    "dense_9_idx0_20260808T215011_retry",
     "connected_room_3_idx0_20260808T210317",
     "connected_room_6_idx0_20260808T210500",
     "connected_room_9_idx0_20260808T211220"
@@ -76,8 +77,8 @@
     "simple_6_idx0_20260808T202207": "scripts/inference/results_s1_r1_core/2026-08-08-20-22-07/instance_name___EnvEmptyNoWait2DRobotCompositeSixPlanarDiskRandom/num_agents___6/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
     "simple_9_idx0_20260808T202601": "scripts/inference/results_s1_r1_core/2026-08-08-20-26-01/instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom/num_agents___9/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
     "dense_3_idx0_20260808T203635": "scripts/inference/results_s1_r1_core/2026-08-08-20-36-35/instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom/num_agents___3/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
-    "dense_6_idx0_20260808T203732": "scripts/inference/results_s1_r1_core/2026-08-08-20-37-32/instance_name___EnvEmptyNoWait2DRobotCompositeSixPlanarDiskRandom/num_agents___6/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
-    "dense_9_idx0_20260808T204759": "scripts/inference/results_s1_r1_core/2026-08-08-20-47-59/instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom/num_agents___9/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+    "dense_6_idx0_20260808T213837_retry": "scripts/inference/results_s1_r1_core_retry/2026-08-08-21-38-37/instance_name___EnvEmptyNoWait2DRobotCompositeSixPlanarDiskRandom/num_agents___6/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+    "dense_9_idx0_20260808T215011_retry": "scripts/inference/results_s1_r1_core_retry/2026-08-08-21-50-11/instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom/num_agents___9/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
     "connected_room_3_idx0_20260808T210317": "scripts/inference/results_s1_r1_core/2026-08-08-21-03-17/instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom/num_agents___3/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
     "connected_room_6_idx0_20260808T210500": "scripts/inference/results_s1_r1_core/2026-08-08-21-05-00/instance_name___EnvEmptyNoWait2DRobotCompositeSixPlanarDiskRandom/num_agents___6/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
     "connected_room_9_idx0_20260808T211220": "scripts/inference/results_s1_r1_core/2026-08-08-21-12-20/instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom/num_agents___9/planner___SMDComposite/single_agent_planner___SMDEnsemble/0"
@@ -104,9 +105,10 @@
   ],
   "figures": [
     "experiments/figures/s1_r1_instances_simple_9agent_idx0.png",
+    "experiments/figures/s1_r1_instances_dense_9agent_idx0.png",
     "experiments/figures/s1_r1_instances_connected_room_9agent_idx0.png"
   ],
-  "dense_9agent_figure": "NOT_GENERATED_NO_RAW_RESULT",
+  "dense_9agent_figure": "experiments/figures/s1_r1_instances_dense_9agent_idx0.png",
   "checker": {
     "path": "scripts/reproduction/check_smd_core_reproduction.py",
     "logic_source": "is_collision.py::check_paths_ok",
@@ -117,8 +119,8 @@
   },
   "disk": {
     "before_gb": 191.15,
-    "after_gb": 190.31,
-    "delta_gb": -0.84,
+    "after_gb": 190.14,
+    "delta_gb": -1.01,
     "note": "Before value is the verified post-S1-R0 baseline; free space also reflects unrelated pre-existing activity during this long run.",
     "no_checkpoint_redownload": true,
     "no_dataset_redownload": true
@@ -133,6 +135,6 @@
     "tr_smd_code": false
   },
   "stage_status": "SUBMITTED_FOR_REVIEW",
-  "final_label": "S1_R1_SMD_MULTISCALE_CORE_REPRODUCTION_SUBMITTED_WITH_PRESERVED_FAILURES",
-  "closure": "S1 not closed by this task; high-level S1 closure review remains required."
+  "final_label": "S1_R1_SMD_MULTISCALE_CORE_REPRODUCTION_READY",
+  "closure": "R1 evidence gate is complete; S1 remains open pending high-level closure review."
 }

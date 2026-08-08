@@ -13,21 +13,22 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 RUNS = {
-    "instances_simple": "2026-08-08-20-26-01",
-    "instances_connected_room": "2026-08-08-21-12-20",
+    "instances_simple": ("results_s1_r1_core", "2026-08-08-20-26-01"),
+    "instances_dense": ("results_s1_r1_core_retry", "2026-08-08-21-50-11"),
+    "instances_connected_room": ("results_s1_r1_core", "2026-08-08-21-12-20"),
 }
 
 
 def main():
     figure_dir = ROOT / "experiments" / "figures"
     figure_dir.mkdir(parents=True, exist_ok=True)
-    for map_name, timestamp in RUNS.items():
+    for map_name, (result_root, timestamp) in RUNS.items():
         num_agents = 9
         result_dir = (
             ROOT
             / "scripts"
             / "inference"
-            / "results_s1_r1_core"
+            / result_root
             / timestamp
             / "instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom"
             / "num_agents___9"

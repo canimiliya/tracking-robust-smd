@@ -199,9 +199,8 @@ This bootstrap is BLOCKED, not ready. The official Git history, remotes, branch,
 ### Core run results
 
 - Commands used the same launcher, `SMDComposite`, `SMDEnsemble`, official pretrained checkpoint, `--start_index 0 --end_index 1`, `--save_path results_s1_r1_core`, and the selected map/instance configuration.
-- Completed runs: `7/9` cells, including the reused S1-R0 cell. New successful cells were `instances_simple x {6,9}`, `instances_dense x 3`, and `instances_connected_room x {3,6,9}`.
-- `instances_dense x 6` and `instances_dense x 9` were each allowed to run with the fixed contract. The launcher wrote `[Errno 22] Invalid argument` to `scripts/inference/error_2026-08-08-20-37-32.txt` and `scripts/inference/error_2026-08-08-20-47-59.txt`, respectively, and neither produced `paths.npy` or `map_info.pkl` before the tool observation limits (`600 s` and `900 s`). They are preserved as `FAIL_NO_RAW_RESULT`; they were not rerun, replaced, or tuned.
-- Successful raw trajectory shapes were exactly `(64,64,12)`, `(64,64,24)`, or `(64,64,36)` for 3, 6, or 9 agents. All seven successful raw arrays were `float32` and finite. Position parsing produced `(3,64,2)`, `(6,64,2)`, or `(9,64,2)`.
+- Completed runs: `9/9` cells, including the reused S1-R0 cell. The first dense 6/9-agent attempts wrote `[Errno 22] Invalid argument` to `scripts/inference/error_2026-08-08-20-37-32.txt` and `scripts/inference/error_2026-08-08-20-47-59.txt`; those failures remain preserved. Same-contract retry attempts then completed both cells in `results_s1_r1_core_retry` without changing map, seed/index, algorithm parameters, checkpoint, or source.
+- Successful raw trajectory shapes were exactly `(64,64,12)`, `(64,64,24)`, or `(64,64,36)` for 3, 6, or 9 agents. All nine matrix raw arrays were `float32` and finite. Position parsing produced `(3,64,2)`, `(6,64,2)`, or `(9,64,2)`.
 - Per-cell runtime, result directory, raw shape, finite status, collision status, and hashes are recorded in `experiments/summaries/s1_r1_core_reproduction.csv`.
 
 ### Unified reproduction-only validation
@@ -209,15 +208,15 @@ This bootstrap is BLOCKED, not ready. The official Git history, remotes, branch,
 - Added `scripts/reproduction/check_smd_core_reproduction.py` and retained the S1-R0 checker unchanged.
 - The new checker extracts only `is_collision.py::check_paths_ok` from official commit `c87fc76044b350a37fcea7afc468c13c8371a237`; it generalizes only result path, agent count, trajectory dimension, and map selection.
 - Collision constants remained `robot_radius=0.05` and `threshold=1e-3`. No interpolation, smoothing, timestep skipping, agent omission, or raw-path repair was performed.
-- All seven successful raw runs received a collision check: `COLLISION_CHECK_COUNT=7`, `COLLISION_FREE_COUNT=7`, `COLLISION_COUNT=0`. Timeout cells had no raw output and therefore no collision check.
+- All nine matrix raw runs received a collision check: `COLLISION_CHECK_COUNT=9`, `COLLISION_FREE_COUNT=9`, `COLLISION_COUNT=0`. The two earlier failed attempts had no raw output and remain historical failure evidence.
 - Minimum distances and start/goal errors in the CSV are provisional reproduction diagnostics only and are not frozen paper metrics.
 
 ### Representative figures and artifacts
 
 - Figures were generated from raw 9-agent trajectories, map obstacles, starts, and goals:
   - `experiments/figures/s1_r1_instances_simple_9agent_idx0.png`, SHA-256 `AB58F5D4FFFD3A466D10AED0DE0C09FED7DC5B8B6BD95A0F45F3A62E748369CE`.
+  - `experiments/figures/s1_r1_instances_dense_9agent_idx0.png`, SHA-256 `B72572AAAD2DC5B50DA732889068DB956D0BC73297C8CC94C2DE0B36939BA376`.
   - `experiments/figures/s1_r1_instances_connected_room_9agent_idx0.png`, SHA-256 `C9B04CE84CC9B501F47802FA94EBD2FC04AF95E04BC730F5A3DB4189028D7B39`.
-- No dense 9-agent figure was fabricated because the dense 9-agent run produced no raw result.
 - Full machine-readable provenance is in `experiments/manifests/s1_r1_core_reproduction_manifest.json`.
 - Free disk was recorded as `191.15 GB` before this task and `190.31 GB` after it (`-0.84 GB`); no checkpoint, dataset, CUDA Toolkit, WSL2, Docker, or duplicate archive was downloaded.
 
@@ -225,4 +224,13 @@ This bootstrap is BLOCKED, not ready. The official Git history, remotes, branch,
 
 - This was not a benchmark sweep, metric freeze, multi-seed study, confidence-interval analysis, retraining, parameter tuning, S2 metric pipeline, or TR-SMD innovation experiment.
 - The evidence demonstrates real official SMD execution and verifiable raw outputs across multiple agent counts/maps for the successful cells, while preserving two dense-map timeout failures.
-- Because the R1 gate requiring 6-agent and 9-agent raw execution on every selected map is not satisfied, this task does not claim `S1_R1_SMD_MULTISCALE_CORE_REPRODUCTION_READY`. High-level S1 closure review remains required.
+- The R1 functional evidence gate is now satisfied for all 9 matrix cells. This task reports `S1_R1_SMD_MULTISCALE_CORE_REPRODUCTION_READY`; S1 itself remains open and requires high-level closure review.
+
+### S1-R1 continuation: dense retry completion
+
+- Continuation started from commit `75a610f089a8feeaa6bf15ebec8db49027b7e770` after the two preserved dense failures.
+- Environment resource check: `TORCH_NUM_THREADS=24`, `TORCH_INTEROP_THREADS=24`, CUDA execution on `NVIDIA GeForce RTX 5060 Ti`.
+- Retry command contract remained official: `--start_index 0 --end_index 1`, `instances_dense`, `SMDComposite`, `SMDEnsemble`, official pretrained checkpoint, and launcher defaults.
+- `instances_dense x 6`: retry timestamp `2026-08-08-21-38-37`, exit `0`, runtime `674.6851348876953 s`, raw shape `(64,64,24)`, paths SHA-256 `987A02E9F649BF65BAF15B482EB449B187C8BB43B1D69C1A905209C001DF90A0`.
+- `instances_dense x 9`: retry timestamp `2026-08-08-21-50-11`, exit `0`, runtime `1476.3706541061401 s`, raw shape `(64,64,36)`, paths SHA-256 `0CEB8562E06A179E8E378DB52479F275D438AC58F7A9223EC0422A746B956F40`.
+- Both retry raw outputs passed finite, shape, official collision, and start/goal sanity checks. Prior failed attempt logs remain committed and referenced in the updated manifest.
