@@ -1,0 +1,10 @@
+[Errno 22] Invalid argumentThis is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-08-20-47-59
+            Trial Number: 0
+            Num Agents: 9
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom
+        

@@ -1,0 +1,138 @@
+{
+  "task_id": "S1-R1-OFFICIAL-SMD-MULTISCALE-CORE-REPRODUCTION-R1",
+  "start_head": "f78eda03baf6957b0df69707abbc7e48cba8ee96",
+  "official_upstream_head": "c87fc76044b350a37fcea7afc468c13c8371a237",
+  "official_baseline_tag": "smd-official-import",
+  "environment": "smd-blackwell",
+  "python": "3.9.25",
+  "torch": "2.7.1+cu128",
+  "torch_cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 5060 Ti",
+  "gpu_capability": [12, 0],
+  "cuda_available": true,
+  "cuda_tensor_test": true,
+  "ipopt_status": "PASS (Pyomo SolverFactory('ipopt').available=True; D:/anaconda/envs/smd-blackwell/Library/bin/ipopt.exe)",
+  "common_maps": [
+    "instances_connected_room",
+    "instances_dense",
+    "instances_empty",
+    "instances_shelf",
+    "instances_simple"
+  ],
+  "common_map_count": 5,
+  "selected_maps": [
+    "instances_simple",
+    "instances_dense",
+    "instances_connected_room"
+  ],
+  "selected_map_count": 3,
+  "instance_idx": 0,
+  "matrix_total": 9,
+  "matrix_reused": 1,
+  "matrix_new": 8,
+  "run_counts": {
+    "3_agent_runs": 3,
+    "6_agent_runs": 3,
+    "9_agent_runs": 3
+  },
+  "execution_completed_count": 7,
+  "execution_failed_count": 2,
+  "finite_path_pass_count": 7,
+  "finite_path_fail_count": 0,
+  "finite_path_not_available_count": 2,
+  "collision_check_count": 7,
+  "collision_free_count": 7,
+  "collision_count": 0,
+  "checkpoint": {
+    "status": "AVAILABLE_AND_UNMODIFIED",
+    "archive": "data_checkpoints.tar.gz",
+    "sha256": "5FB165686FA55E8955D842FA167B52ACD93A03AA513CD60787FEDF877B51689B",
+    "retrained": false
+  },
+  "algorithm_parameters": {
+    "agents_max_speeds": 0.05,
+    "rho": 5.0,
+    "rho_factor": 1.05,
+    "alm_iteration": 100,
+    "tolerance": 0.001,
+    "projection_step": [15, 5],
+    "runtime_limit": 100000,
+    "planner": "SMDComposite",
+    "single_agent_planner": "SMDEnsemble"
+  },
+  "run_ids": [
+    "simple_3_idx0_s1r0",
+    "simple_6_idx0_20260808T202207",
+    "simple_9_idx0_20260808T202601",
+    "dense_3_idx0_20260808T203635",
+    "dense_6_idx0_20260808T203732",
+    "dense_9_idx0_20260808T204759",
+    "connected_room_3_idx0_20260808T210317",
+    "connected_room_6_idx0_20260808T210500",
+    "connected_room_9_idx0_20260808T211220"
+  ],
+  "result_dirs": {
+    "simple_3_idx0_s1r0": "scripts/inference/results_s1_r0_3agent/2026-08-08-20-09-42/instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom/num_agents___3/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+    "simple_6_idx0_20260808T202207": "scripts/inference/results_s1_r1_core/2026-08-08-20-22-07/instance_name___EnvEmptyNoWait2DRobotCompositeSixPlanarDiskRandom/num_agents___6/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+    "simple_9_idx0_20260808T202601": "scripts/inference/results_s1_r1_core/2026-08-08-20-26-01/instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom/num_agents___9/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+    "dense_3_idx0_20260808T203635": "scripts/inference/results_s1_r1_core/2026-08-08-20-36-35/instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom/num_agents___3/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+    "dense_6_idx0_20260808T203732": "scripts/inference/results_s1_r1_core/2026-08-08-20-37-32/instance_name___EnvEmptyNoWait2DRobotCompositeSixPlanarDiskRandom/num_agents___6/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+    "dense_9_idx0_20260808T204759": "scripts/inference/results_s1_r1_core/2026-08-08-20-47-59/instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom/num_agents___9/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+    "connected_room_3_idx0_20260808T210317": "scripts/inference/results_s1_r1_core/2026-08-08-21-03-17/instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom/num_agents___3/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+    "connected_room_6_idx0_20260808T210500": "scripts/inference/results_s1_r1_core/2026-08-08-21-05-00/instance_name___EnvEmptyNoWait2DRobotCompositeSixPlanarDiskRandom/num_agents___6/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+    "connected_room_9_idx0_20260808T211220": "scripts/inference/results_s1_r1_core/2026-08-08-21-12-20/instance_name___EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom/num_agents___9/planner___SMDComposite/single_agent_planner___SMDEnsemble/0"
+  },
+  "raw_result_failures": [
+    {
+      "map_name": "instances_dense",
+      "num_agents": 6,
+      "execution_status": "FAIL_NO_RAW_RESULT",
+      "program_error": "[Errno 22] Invalid argument",
+      "observed_timeout_seconds": 600,
+      "raw_result": false,
+      "error_log": "scripts/inference/error_2026-08-08-20-37-32.txt"
+    },
+    {
+      "map_name": "instances_dense",
+      "num_agents": 9,
+      "execution_status": "FAIL_NO_RAW_RESULT",
+      "program_error": "[Errno 22] Invalid argument",
+      "observed_timeout_seconds": 900,
+      "raw_result": false,
+      "error_log": "scripts/inference/error_2026-08-08-20-47-59.txt"
+    }
+  ],
+  "figures": [
+    "experiments/figures/s1_r1_instances_simple_9agent_idx0.png",
+    "experiments/figures/s1_r1_instances_connected_room_9agent_idx0.png"
+  ],
+  "dense_9agent_figure": "NOT_GENERATED_NO_RAW_RESULT",
+  "checker": {
+    "path": "scripts/reproduction/check_smd_core_reproduction.py",
+    "logic_source": "is_collision.py::check_paths_ok",
+    "logic_source_commit": "c87fc76044b350a37fcea7afc468c13c8371a237",
+    "robot_radius": 0.05,
+    "threshold": 0.001,
+    "paper_metric_pipeline": false
+  },
+  "disk": {
+    "before_gb": 191.15,
+    "after_gb": 190.31,
+    "delta_gb": -0.84,
+    "note": "Before value is the verified post-S1-R0 baseline; free space also reflects unrelated pre-existing activity during this long run.",
+    "no_checkpoint_redownload": true,
+    "no_dataset_redownload": true
+  },
+  "baseline_integrity": {
+    "smd_diff_empty": true,
+    "deps_diff_empty": true,
+    "entrypoint_diff_only_three_approved_map_name_substitutions": true,
+    "algorithm_parameter_change": false,
+    "smd_algorithm_modified": false,
+    "deps_algorithm_modified": false,
+    "tr_smd_code": false
+  },
+  "stage_status": "SUBMITTED_FOR_REVIEW",
+  "final_label": "S1_R1_SMD_MULTISCALE_CORE_REPRODUCTION_SUBMITTED_WITH_PRESERVED_FAILURES",
+  "closure": "S1 not closed by this task; high-level S1 closure review remains required."
+}

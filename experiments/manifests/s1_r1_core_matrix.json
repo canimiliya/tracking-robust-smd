@@ -1,0 +1,37 @@
+{
+  "task_id": "S1-R1-OFFICIAL-SMD-MULTISCALE-CORE-REPRODUCTION-R1",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "start_head": "f78eda03baf6957b0df69707abbc7e48cba8ee96",
+  "official_upstream_head": "c87fc76044b350a37fcea7afc468c13c8371a237",
+  "official_baseline_tag": "smd-official-import",
+  "common_map_count": 5,
+  "common_maps": [
+    "instances_connected_room",
+    "instances_dense",
+    "instances_empty",
+    "instances_shelf",
+    "instances_simple"
+  ],
+  "selected_map_count": 3,
+  "selected_maps": [
+    "instances_simple",
+    "instances_dense",
+    "instances_connected_room"
+  ],
+  "selection_rationale": "Three locally available official maps spanning simple, obstacle-dense, and structured-room layouts.",
+  "agent_counts": [3, 6, 9],
+  "instance_idx": 0,
+  "matrix_total": 9,
+  "matrix_reused": 1,
+  "matrix_new": 8,
+  "reused_cells": [
+    {
+      "map_name": "instances_simple",
+      "num_agents": 3,
+      "instance_idx": 0,
+      "run_origin": "S1_R0_REUSED",
+      "result_dir": "scripts/inference/results_s1_r0_3agent/2026-08-08-20-09-42/instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom/num_agents___3/planner___SMDComposite/single_agent_planner___SMDEnsemble/0"
+    }
+  ],
+  "new_cells": "All remaining combinations of selected_maps x [3, 6, 9] at instance_idx=0"
+}

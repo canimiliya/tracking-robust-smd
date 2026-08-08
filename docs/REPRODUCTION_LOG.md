@@ -166,3 +166,63 @@ This bootstrap is BLOCKED, not ready. The official Git history, remotes, branch,
 - Evidence figure: `experiments/figures/s1_r0_smd_3agent_instances_simple_idx0.png`; SHA-256 `77CD17151AECDF34439A1D562EBB626A902486CA10D274EC79EC677DF87A580C`.
 - Disk: `FREE_DISK_SPACE_BEFORE_GB=191.4`, `FREE_DISK_SPACE_AFTER_GB=191.15`, `DISK_DELTA_GB=-0.25`; no duplicate checkpoint/data, WSL2, Docker, CUDA Toolkit, benchmark, or extra agent run was created.
 - This section is S1-R0 functional reproduction evidence only. It is not a paper metric pipeline, S1 closeout, multi-map benchmark, 6/9-agent run, tuning, or TR-SMD experiment.
+
+## S1-R1 Multiscale Core Reproduction
+
+- TASK_ID: `S1-R1-OFFICIAL-SMD-MULTISCALE-CORE-REPRODUCTION-R1`
+- DATE: 2026-08-08
+- BRANCH: `repro/s1-smd-functional`
+- START_HEAD: `f78eda03baf6957b0df69707abbc7e48cba8ee96`
+- OFFICIAL_UPSTREAM_HEAD: `c87fc76044b350a37fcea7afc468c13c8371a237`
+- BASELINE_TAG: `smd-official-import`
+- S1 status for this task: `SUBMITTED_FOR_REVIEW`; S1 was not closed.
+
+### Official map inventory and frozen matrix
+
+- The local inventory was computed from `instances_data/`, `init4proj_data/`, `data_trajectories/`, and `data_trained_models/`, rather than inferred from README names.
+- `COMMON_MAP_COUNT=5`.
+- `COMMON_MAPS=[instances_connected_room, instances_dense, instances_empty, instances_shelf, instances_simple]`.
+- Each common map has a matching `instances_<map>_init4proj_agent_{3,6,9}.pkl` and `instances_<map>.pkl`.
+- The frozen core matrix selected three available maps: `instances_simple`, `instances_dense`, and `instances_connected_room`; instance index was fixed to `0`.
+- Matrix size was `3 maps x 3 agent counts = 9 cells`; one cell (`instances_simple x 3`) was reused from S1-R0 and eight cells were newly attempted.
+- The frozen selection is recorded in `experiments/manifests/s1_r1_core_matrix.json`.
+
+### Environment and integrity gates
+
+- `PYTHON=3.9.25`, `TORCH=2.7.1+cu128`, `TORCH_CUDA=12.8`, `GPU=NVIDIA GeForce RTX 5060 Ti`, `CAPABILITY=(12, 0)`, `CUDA_AVAILABLE=True`.
+- The CUDA tensor test passed. Pyomo `SolverFactory('ipopt').available(exception_flag=False)` returned `True` and resolved `D:/anaconda/envs/smd-blackwell/Library/bin/ipopt.exe`.
+- Existing checkpoint/data were reused. `data_checkpoints.tar.gz` SHA-256 remained `5FB165686FA55E8955D842FA167B52ACD93A03AA513CD60787FEDF877B51689B`.
+- `git diff smd-official-import -- smd` was empty and `git diff smd-official-import -- deps` was empty.
+- The entrypoint diff remained only the three previously authorized `map_name` to `args.map_name` substitutions. No planner, projection, ALM, checkpoint, architecture, diffusion, or dependency algorithm was changed.
+- Official defaults were retained: `agents_max_speeds=0.05`, `rho=5.0`, `rho_factor=1.05`, `alm_iteration=100`, `tolerance=1e-3`, `projection_step=[15,5]`, and `runtime_limit=100000`.
+
+### Core run results
+
+- Commands used the same launcher, `SMDComposite`, `SMDEnsemble`, official pretrained checkpoint, `--start_index 0 --end_index 1`, `--save_path results_s1_r1_core`, and the selected map/instance configuration.
+- Completed runs: `7/9` cells, including the reused S1-R0 cell. New successful cells were `instances_simple x {6,9}`, `instances_dense x 3`, and `instances_connected_room x {3,6,9}`.
+- `instances_dense x 6` and `instances_dense x 9` were each allowed to run with the fixed contract. The launcher wrote `[Errno 22] Invalid argument` to `scripts/inference/error_2026-08-08-20-37-32.txt` and `scripts/inference/error_2026-08-08-20-47-59.txt`, respectively, and neither produced `paths.npy` or `map_info.pkl` before the tool observation limits (`600 s` and `900 s`). They are preserved as `FAIL_NO_RAW_RESULT`; they were not rerun, replaced, or tuned.
+- Successful raw trajectory shapes were exactly `(64,64,12)`, `(64,64,24)`, or `(64,64,36)` for 3, 6, or 9 agents. All seven successful raw arrays were `float32` and finite. Position parsing produced `(3,64,2)`, `(6,64,2)`, or `(9,64,2)`.
+- Per-cell runtime, result directory, raw shape, finite status, collision status, and hashes are recorded in `experiments/summaries/s1_r1_core_reproduction.csv`.
+
+### Unified reproduction-only validation
+
+- Added `scripts/reproduction/check_smd_core_reproduction.py` and retained the S1-R0 checker unchanged.
+- The new checker extracts only `is_collision.py::check_paths_ok` from official commit `c87fc76044b350a37fcea7afc468c13c8371a237`; it generalizes only result path, agent count, trajectory dimension, and map selection.
+- Collision constants remained `robot_radius=0.05` and `threshold=1e-3`. No interpolation, smoothing, timestep skipping, agent omission, or raw-path repair was performed.
+- All seven successful raw runs received a collision check: `COLLISION_CHECK_COUNT=7`, `COLLISION_FREE_COUNT=7`, `COLLISION_COUNT=0`. Timeout cells had no raw output and therefore no collision check.
+- Minimum distances and start/goal errors in the CSV are provisional reproduction diagnostics only and are not frozen paper metrics.
+
+### Representative figures and artifacts
+
+- Figures were generated from raw 9-agent trajectories, map obstacles, starts, and goals:
+  - `experiments/figures/s1_r1_instances_simple_9agent_idx0.png`, SHA-256 `AB58F5D4FFFD3A466D10AED0DE0C09FED7DC5B8B6BD95A0F45F3A62E748369CE`.
+  - `experiments/figures/s1_r1_instances_connected_room_9agent_idx0.png`, SHA-256 `C9B04CE84CC9B501F47802FA94EBD2FC04AF95E04BC730F5A3DB4189028D7B39`.
+- No dense 9-agent figure was fabricated because the dense 9-agent run produced no raw result.
+- Full machine-readable provenance is in `experiments/manifests/s1_r1_core_reproduction_manifest.json`.
+- Free disk was recorded as `191.15 GB` before this task and `190.31 GB` after it (`-0.84 GB`); no checkpoint, dataset, CUDA Toolkit, WSL2, Docker, or duplicate archive was downloaded.
+
+### Scope and interpretation
+
+- This was not a benchmark sweep, metric freeze, multi-seed study, confidence-interval analysis, retraining, parameter tuning, S2 metric pipeline, or TR-SMD innovation experiment.
+- The evidence demonstrates real official SMD execution and verifiable raw outputs across multiple agent counts/maps for the successful cells, while preserving two dense-map timeout failures.
+- Because the R1 gate requiring 6-agent and 9-agent raw execution on every selected map is not satisfied, this task does not claim `S1_R1_SMD_MULTISCALE_CORE_REPRODUCTION_READY`. High-level S1 closure review remains required.
