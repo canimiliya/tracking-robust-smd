@@ -1,0 +1,23 @@
+# Captured with: conda list -n smd-blackwell
+# Environment prefix: D:\anaconda\envs\smd-blackwell
+ampl-asl 1.0.0 he0c23c2_2 conda-forge
+ca-certificates 2026.7.22 h4c7d964_0 conda-forge
+experiment-launcher 2.3 pypi_0 pypi
+ipopt 3.14.19 he5a0f77_2 conda-forge
+mp-baselines 0.0.0 pypi_0 pypi
+networkx 2.8.8 pypi_0 pypi
+numpy 1.24.1 pypi_0 pypi
+pip 26.0.1 pyhc872135_1
+python 3.9.25 h716150d_1
+setuptools 70.2.0 pypi_0 pypi
+smd 0.1 pypi_0 pypi
+torch 2.7.1+cu128 pypi_0 pypi
+torch-robotics 0.0.0 pypi_0 pypi
+torchaudio 2.7.1+cu128 pypi_0 pypi
+torchvision 0.22.1+cu128 pypi_0 pypi
+urdfpy 0.0.22 pypi_0 pypi
+Pyomo 6.8.2 pypi_0 pypi
+scipy 1.10.1 pypi_0 pypi
+opencv-python 4.10.0.84 pypi_0 pypi
+transformers 4.46.3 pypi_0 pypi
+safetensors 0.5.3 pypi_0 pypi

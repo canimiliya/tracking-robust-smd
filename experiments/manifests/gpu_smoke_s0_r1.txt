@@ -1,0 +1,28 @@
+TASK_ID=S0-R1-NATIVE-BLACKWELL-COMPATIBILITY-R1
+ENV=smd-blackwell
+GPU_GATE_COMMAND=python -c with torch CUDA tensor allocation and 1024x1024 matmul
+
+TORCH_VERSION=2.7.1+cu128
+TORCH_CUDA=12.8
+CUDA_AVAILABLE=True
+DEVICE=NVIDIA GeForce RTX 5060 Ti
+CAPABILITY=(12, 0)
+CUDA_TENSOR_TEST=PASS
+CUDA_MATMUL_TEST=PASS
+TENSOR_DEVICE=cuda:0
+FINITE=True
+SM_120_UNSUPPORTED_WARNING=NOT_PRESENT
+
+UPSTREAM_MAP_NAME_BUG_REPRODUCED=PASS
+BUG_TRACE=launch_smd_composite_experiment.py:105 NameError: name 'map_name' is not defined
+SOURCE_PATCH=Only args.map_name substituted for the three/six/nine init trajectory filename references.
+
+POST_PATCH_SMOKE_COMMAND=python launch_smd_composite_experiment.py --start_index 0 --end_index 1 --map_name instances_simple
+POST_PATCH_SMOKE_STATUS=PASS
+POST_PATCH_SMOKE_EVIDENCE=start_state_pos and goal_state_pos printed with device='cuda:0'; official SDF/data/model path loaded; SMD projection completed 29 iterations and wrote results_test/2026-08-08-19-57-32/.
+SMD_GPU_EXECUTION_CONFIRMED=true
+CHECKPOINT_LOAD_STATUS=PASS; TrajectoryDataset n_trajs=1000, trajectory_dim=(64, 12), model channel dimensions loaded.
+
+COLLISION_COMMAND=python is_collision.py
+COLLISION_STATUS=NOT_APPLICABLE_AT_S0_SMOKE
+COLLISION_BOUNDARY=The official checker is hard-coded for nine-agent result paths while this authorized smoke is three-agent; it attempted a stale failed-run path and raised missing map_info.pkl. No checker source was changed.

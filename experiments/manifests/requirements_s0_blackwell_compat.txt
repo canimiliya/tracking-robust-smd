@@ -1,0 +1,45 @@
+# S0-R1 native Blackwell compatibility manifest.
+# Official requirements.txt is unchanged and remains the source-of-truth baseline.
+# This file records only the compatibility delta and the installation policy.
+
+OFFICIAL_PYTHON=3.8.20
+COMPAT_PYTHON=3.9.25
+OFFICIAL_TORCH=2.1.2+cu121
+COMPAT_TORCH=2.7.1+cu128
+COMPAT_TORCHVISION=0.22.1+cu128
+COMPAT_TORCHAUDIO=2.7.1+cu128
+PYTORCH_INDEX=https://download.pytorch.org/whl/cu128
+
+INSTALL_BASE:
+- Install every pinned entry in requirements.txt except the explicitly audited entries below.
+- Install setuptools==70.2.0.
+- Install ipopt from conda-forge.
+- Install deps/torch_robotics, deps/experiment_launcher, deps/motion_planning_baselines, and the root package editable with --no-deps.
+
+PACKAGE=Hydra
+OFFICIAL_VERSION=2.5
+COMPAT_ACTION=SKIP_ON_NATIVE_WINDOWS
+REASON=The official Windows install attempt requires the Unix header unistd.h while building the package.
+RUNTIME_USAGE_AUDIT=DECLARED_BUT_NO_DIRECT_RUNTIME_USAGE; no import/call found in smd, deps, or scripts.
+
+PACKAGE=triton
+OFFICIAL_VERSION=2.1.0
+COMPAT_ACTION=SKIP_ON_NATIVE_WINDOWS
+REASON=No matching native Windows distribution was available for the pinned version.
+RUNTIME_USAGE_AUDIT=DECLARED_BUT_NO_DIRECT_RUNTIME_USAGE; no import/call found in smd, deps, or scripts.
+
+PACKAGE=patchelf
+OFFICIAL_VERSION=README install command; no requirements pin
+COMPAT_ACTION=SKIP_ON_NATIVE_WINDOWS
+REASON=No win-64 package was available from the tested default Conda channel; no executable call is made by SMD runtime.
+RUNTIME_USAGE_AUDIT=DECLARED_BUT_NO_DIRECT_RUNTIME_USAGE; only README install declaration at README.md:53.
+
+PACKAGE=networkx
+OFFICIAL_VERSION=2.2
+COMPAT_ACTION=OVERRIDE_TO_2.8.8
+REASON=networkx 2.2 imports fractions.gcd, which is removed in Python 3.9; the inference smoke reproduced this exact ImportError before the override.
+RUNTIME_USAGE_AUDIT=DIRECT_RUNTIME_USAGE; imported by deps/torch_robotics/torch_robotics/torch_kinematics_tree/geometrics/skeleton.py and .../models/utils.py.
+
+COMPATIBILITY_BOUNDARY:
+- pip check remains non-clean because smd and urdfpy metadata declare networkx==2.2 and smd metadata declares the skipped Hydra/triton packages.
+- The networkx override is a dependency-only compatibility delta; no smd/, deps/, planner, projection, checkpoint, model, or algorithm source was changed.

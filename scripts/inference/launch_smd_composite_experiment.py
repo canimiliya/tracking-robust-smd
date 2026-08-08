@@ -102,13 +102,13 @@ if __name__ == "__main__":
                 experiment_config.num_agents_l = [2]
             elif "three" in instance_name.lower():
                 experiment_config.num_agents_l = [3]
-                init_traj4proj = pickle.load(open(f'../../init4proj_data/{map_name}_init4proj_agent_3.pkl', 'rb'))
+                init_traj4proj = pickle.load(open(f'../../init4proj_data/{args.map_name}_init4proj_agent_3.pkl', 'rb'))
             elif "six" in instance_name.lower():
                 experiment_config.num_agents_l = [6]
-                init_traj4proj = pickle.load(open(f'../../init4proj_data/{map_name}_init4proj_agent_6.pkl', 'rb'))
+                init_traj4proj = pickle.load(open(f'../../init4proj_data/{args.map_name}_init4proj_agent_6.pkl', 'rb'))
             elif "nine" in instance_name.lower():
                 experiment_config.num_agents_l = [9]
-                init_traj4proj = pickle.load(open(f'../../init4proj_data/{map_name}_init4proj_agent_9.pkl', 'rb'))
+                init_traj4proj = pickle.load(open(f'../../init4proj_data/{args.map_name}_init4proj_agent_9.pkl', 'rb'))
 
             
 

@@ -77,3 +77,47 @@
 ## Scope decision
 
 This bootstrap is BLOCKED, not ready. The official Git history, remotes, branch, baseline tag, source provenance, partial environment, and checkpoint/data provenance are preserved. Do not start S1 or compatibility/source repair without higher-level authorization.
+
+## S0-R1 native Blackwell remediation
+
+- TASK_ID: S0-R1-NATIVE-BLACKWELL-COMPATIBILITY-R1
+- BASE_BRANCH: repro/smd-official
+- START_HEAD: 7b9e780547846d6455d00f84b912748bb2fc148d
+- REMEDIATION_BRANCH: fix/s0-native-blackwell-compat
+- OFFICIAL_BASELINE_TAG: smd-official-import -> c87fc76044b350a37fcea7afc468c13c8371a237
+- DATE: 2026-08-08
+
+### Dependency and GPU gates
+
+- A separate `smd-blackwell` Conda environment was created with Python 3.9.25. The existing `smd` Python 3.8.20 environment was preserved unchanged as the official-version attempt.
+- Official fixed stack: Python 3.8.20, torch 2.1.2+cu121. Compatibility stack: Python 3.9.25, torch 2.7.1+cu128, torchvision 0.22.1+cu128, torchaudio 2.7.1+cu128 from the official PyTorch cu128 index.
+- GPU gate: PASS. `CUDA_AVAILABLE=True`, device `NVIDIA GeForce RTX 5060 Ti`, capability `(12, 0)`, CUDA tensor allocation PASS, 1024x1024 CUDA matmul PASS, finite result True. No `sm_120` unsupported warning was emitted.
+- IPOPT 3.14.19 from conda-forge was available. Core imports passed for torch, torchvision, torchaudio, smd, torch_robotics, experiment_launcher, mp_baselines, cholespy, numpy, scipy, pyomo, safetensors, transformers, cv2, and the inference module when launched from `scripts/inference`.
+- `pip check` is not clean by design and is recorded as a failure boundary: SMD metadata declares Hydra==2.5 and triton==2.1.0, both intentionally skipped after runtime audit, and both SMD/urdfpy metadata declare networkx==2.2 while the compatibility environment uses networkx==2.8.8.
+
+### Runtime usage audit
+
+- `HYDRA_RUNTIME_USAGE=DECLARED_BUT_NO_DIRECT_RUNTIME_USAGE`: no import or call found in `smd/`, `deps/`, or `scripts/`; only `requirements.txt` and package metadata declare it. The native Windows build failed on `unistd.h`.
+- `TRITON_RUNTIME_USAGE=DECLARED_BUT_NO_DIRECT_RUNTIME_USAGE`: no import or call found in `smd/`, `deps/`, or `scripts/`; the pinned 2.1.0 package has no native Windows distribution.
+- `PATCHELF_RUNTIME_USAGE=DECLARED_BUT_NO_DIRECT_RUNTIME_USAGE`: only the README install declaration at line 53; no runtime call. The tested win-64/defaults channel has no package.
+- `networkx` is a direct runtime dependency through `deps/torch_robotics/torch_robotics/torch_kinematics_tree/geometrics/skeleton.py` and `.../models/utils.py`. The official 2.2 package raised `ImportError: cannot import name 'gcd' from 'fractions'` under Python 3.9. The minimal dependency-only override to 2.8.8 allowed the official path to continue; no source code was changed for this issue.
+
+### Official bug reproduction and authorized patch
+
+- Before source modification, the new environment reproduced the upstream failure exactly: `launch_smd_composite_experiment.py:105`, `NameError: name 'map_name' is not defined`.
+- The only source patch changes the three, six, and nine-agent init trajectory filename references from `map_name` to the already parsed `args.map_name`. This is an entrypoint variable binding correction only.
+- `git diff smd-official-import -- smd` and `git diff smd-official-import -- deps` remain empty. No SMD algorithm, planner, projection, ALM, checkpoint, architecture, dynamics, constraints, loss, weights, seed behavior, or data was changed.
+
+### Inference and collision smoke
+
+- Command: `conda run -n smd-blackwell python launch_smd_composite_experiment.py --start_index 0 --end_index 1 --map_name instances_simple` from `scripts/inference`.
+- `SMOKE_STATUS=PASS_WITH_COMPAT_DELTA`: SDF and official trajectory dataset loaded (`n_trajs: 1000`, `trajectory_dim: (64, 12)`), model channels loaded, start/goal tensors printed with `device='cuda:0'`, official projection completed, and result output was written under `scripts/inference/results_test/2026-08-08-19-57-32/`.
+- `CHECKPOINT_LOAD_STATUS=PASS`; `SMD_GPU_EXECUTION_CONFIRMED=true` based on the CUDA device of the key start/goal tensors and successful CUDA inference iterations.
+- `is_collision.py` was run only after inference created `results_test/`. It is `COLLISION_STATUS=NOT_APPLICABLE_AT_S0_SMOKE`: the official checker is hard-coded for nine-agent result paths, while this authorized smoke is three-agent, and it encountered a missing `map_info.pkl` in a stale failed-run path. No collision-checker source was changed and no nine-agent benchmark was started.
+
+### Storage and artifacts
+
+- `FREE_DISK_SPACE_BEFORE_GB=199.67`; `FREE_DISK_SPACE_AFTER_GB=191.92`; `DISK_DELTA_GB=-7.75`.
+- The existing 609486811-byte checkpoint archive and extracted data were reused; no duplicate checkpoint, clone, WSL2 distro, Docker image, CUDA Toolkit, video, or benchmark trajectory set was created.
+- Evidence manifests: `experiments/manifests/system_manifest_s0_r1.txt`, `pip_freeze_s0_r1.txt`, `conda_list_s0_r1.txt`, `requirements_s0_blackwell_compat.txt`, and `gpu_smoke_s0_r1.txt`.
+- This remediation remains limited to S0. No S1 benchmark, multi-map, multi-seed, 6/9-agent study, training, tuning, TR-SMD innovation, or paper experiment was started.

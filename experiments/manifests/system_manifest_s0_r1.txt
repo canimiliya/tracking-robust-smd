@@ -1,0 +1,54 @@
+TASK_ID=S0-R1-NATIVE-BLACKWELL-COMPATIBILITY-R1
+DATE=2026-08-08
+LOCAL_ROOT=D:/Desktop/my_project/TR-SMD
+OS=Microsoft Windows 11 Professional 10.0.26100
+CPU=Intel(R) Core(TM) Ultra 7 270K Plus
+RAM_GB=47.38
+GPU=NVIDIA GeForce RTX 5060 Ti
+NVIDIA_DRIVER=581.29
+NVIDIA_SMI_CUDA=13.0
+NVCC=NOT_ON_PATH
+
+START_HEAD=7b9e780547846d6455d00f84b912748bb2fc148d
+BASELINE_TAG=smd-official-import
+BASELINE_TAG_HEAD=c87fc76044b350a37fcea7afc468c13c8371a237
+BRANCH=fix/s0-native-blackwell-compat
+UPSTREAM_HEAD=c87fc76044b350a37fcea7afc468c13c8371a237
+ORIGIN=https://github.com/canimiliya/tracking-robust-smd.git
+UPSTREAM=https://github.com/RAISELab-atUVA/Diffusion-MRMP.git
+
+OFFICIAL_ENV=smd
+OFFICIAL_PYTHON=3.8.20
+OFFICIAL_TORCH=2.1.2+cu121
+COMPAT_ENV=smd-blackwell
+COMPAT_PYTHON=3.9.25
+COMPAT_TORCH=2.7.1+cu128
+COMPAT_TORCHVISION=0.22.1+cu128
+COMPAT_TORCHAUDIO=2.7.1+cu128
+COMPAT_TORCH_CUDA=12.8
+IPOPT=3.14.19 conda-forge
+SETUPTOOLS=70.2.0
+NETWORKX=2.8.8 compatibility override from official 2.2
+HYDRA=SKIPPED; no direct SMD runtime usage; native Windows build requires unistd.h
+TRITON=SKIPPED; no direct SMD runtime usage; no native Windows 2.1.0 distribution
+PATCHELF=SKIPPED; unavailable on tested win-64/defaults channel; no runtime call
+
+GPU_GATE=PASS
+CUDA_AVAILABLE=True
+GPU_CAPABILITY=(12, 0)
+CUDA_TENSOR_TEST=PASS
+CUDA_MATMUL_TEST=PASS
+SM_120_WARNING=NOT_PRESENT
+IMPORT_STATUS=PASS for core imports and inference module from scripts/inference
+IPOPT_STATUS=PASS
+PIP_CHECK=FAIL_EXPECTED; missing Hydra/triton and metadata mismatch networkx 2.2 versus runtime override 2.8.8
+CHECKPOINT_STATUS=REUSED_EXISTING_DATA; no re-download
+CHECKPOINT_SHA256=5FB165686FA55E8955D842FA167B52ACD93A03AA513CD60787FEDF877B51689B
+SMD_GPU_EXECUTION_CONFIRMED=true
+SMOKE_STATUS=PASS_WITH_COMPAT_DELTA
+COLLISION_STATUS=NOT_APPLICABLE_AT_S0_SMOKE
+
+FREE_DISK_SPACE_BEFORE_GB=199.67
+FREE_DISK_SPACE_AFTER_GB=191.92
+DISK_DELTA_GB=-7.75
+DISK_DELTA_NOTE=New Blackwell environment and official wheels/dependencies; existing checkpoint was reused and not copied.
