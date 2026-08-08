@@ -1,0 +1,96 @@
+{
+  "task_id": "S2-R0-SMD-BASELINE-METRIC-CONTRACT-PARITY-FREEZE-R1",
+  "stage": "S2",
+  "s1_main_integration": "ff-only",
+  "official_upstream_head": "c87fc76044b350a37fcea7afc468c13c8371a237",
+  "official_baseline_tag": "smd-official-import",
+  "s1_ready_head": "b68212d5f5e7ede4d001d68a40378d2cdf4647fa",
+  "smd_baseline_ready_tag": "smd-baseline-ready",
+  "smd_baseline_ready_tag_head": "b68212d5f5e7ede4d001d68a40378d2cdf4647fa",
+  "s2_branch": "repro/s2-metric-contract",
+  "environment": "smd-blackwell",
+  "python": "3.9.25",
+  "torch": "2.7.1+cu128",
+  "torch_cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 5060 Ti",
+  "gpu_capability": [12, 0],
+  "cuda_available": true,
+  "torch_threads": 24,
+  "torch_interop_threads": 24,
+  "ipopt_status": "PASS",
+  "metric_source_head": "c87fc76044b350a37fcea7afc468c13c8371a237",
+  "metric_source_files": {
+    "is_collision.py": "834d2e73359ae009eccbe24057e567a1bfcaca16",
+    "deps/torch_robotics/torch_robotics/trajectory/metrics.py": "e1dd3da7086f3d6b6e5c3ca6e602bd13a8ee5de3",
+    "scripts/inference/inference_multi_agent.py": "48c67770da865969f33b8413021a8b1c610b13ca",
+    "smd/common/experiments/experiments.py": "14b4e873943b2a99fbdf954c98a556adb7706fbc",
+    "smd/common/experiments/experiment_utils.py": "15eb759311770daa3832935d47b48996950429f1"
+  },
+  "primary_candidate_index": 0,
+  "state_layout": {
+    "state_dim": "4 * NUM_AGENTS",
+    "position_dim": "2 * NUM_AGENTS",
+    "velocity_dim": "2 * NUM_AGENTS",
+    "position_extraction": "raw_paths[0, :, :2*N] -> (N,T,2)",
+    "velocity_extraction": "raw_paths[0, :, 2*N:4*N] -> (N,T,2)"
+  },
+  "collision_contract": {
+    "source": "is_collision.py::check_paths_ok",
+    "robot_radius": 0.05,
+    "threshold": 0.001,
+    "official_collision_free": "official boolean; not signed clearance"
+  },
+  "signed_clearance_contract": {
+    "min_inter_agent_center_distance": "min pairwise center distance over agents and timesteps",
+    "min_inter_agent_clearance_m": "center distance - 2 * robot_radius",
+    "min_obstacle_clearance_m": "distance to obstacle center - robot_radius - obstacle_radius",
+    "clip_negative_values": false
+  },
+  "path_length_contract": {
+    "source": "torch_robotics.trajectory.metrics.compute_path_length_from_pos",
+    "per_agent": "sum_t ||p_i(t+1)-p_i(t)||",
+    "primary_aggregate": "mean over agents",
+    "unit": "m",
+    "total_secondary_aggregate": true
+  },
+  "acceleration_contract": {
+    "source": "torch_robotics.trajectory.metrics.compute_average_acceleration_from_pos_vel",
+    "definition": "mean_t ||v_i(t+1)-v_i(t)||, then mean over agents",
+    "interpretation": "OFFICIAL_DISCRETE_VELOCITY_CHANGE_METRIC",
+    "divide_by_dt": false
+  },
+  "runtime_contract": {
+    "planning_time_s": "time around planner.plan(...) from official inference_multi_agent.py",
+    "wall_runtime_s": "external wrapper launcher-to-completion time",
+    "planning_time_must_be_le_wall_runtime": true
+  },
+  "success_contract": {
+    "planning_success": "scheduled trial AND raw result exists AND finite AND official_collision_free",
+    "planning_success_denominator": "all scheduled scientific trials",
+    "collision_ratio": "valid-trajectory collision trials / scheduled scientific trials",
+    "separate_failure_ratios": ["NO_OUTPUT_FAILURE_RATIO", "NONFINITE_FAILURE_RATIO", "COLLISION_RATIO", "PLANNING_SUCCESS_RATE"]
+  },
+  "retry_policy": {
+    "algorithm_failure": "retain failure; no retry to improve headline result",
+    "infrastructure_failure": "at most one identical retry",
+    "runtime_parity_parent_attempt": "s2_runtime_parity_20260809T011507",
+    "runtime_parity_retry_attempt": "s2_runtime_parity_20260809T011633",
+    "runtime_parity_failure_class": "INFRASTRUCTURE_FAILURE"
+  },
+  "parity_results": {
+    "matrix_rows": 9,
+    "collision_parity_count": "9/9",
+    "collision_boolean_mismatch": 0,
+    "path_length_parity": "PASS",
+    "path_length_max_abs_error": 9.5367431640625e-07,
+    "acceleration_parity": "PASS",
+    "acceleration_max_abs_error": 3.5762786865234375e-07,
+    "runtime_parity": "PASS",
+    "runtime_parity_run": "s2_runtime_parity_20260809T011633",
+    "candidate_selection_pass_count": 9,
+    "shape_pass_count": 9
+  },
+  "baseline_metrics_csv_sha256": "80093102958D6F419AB161697798F3EBCFC17F89BB697C3D58EA5085D6C5CDB1",
+  "official_vs_reproduced_csv_sha256": "D8C242D89AAF3303DE49E46B1832290A1B291879B95ABFB5836446BE4B807D40",
+  "runtime_parity_json_sha256": "5CFFDC7DC7216184D5FEB0842BB0048C3AC8E57C7DC0C2DCB61D737AE3A66C27"
+}

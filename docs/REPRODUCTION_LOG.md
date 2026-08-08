@@ -234,3 +234,18 @@ This bootstrap is BLOCKED, not ready. The official Git history, remotes, branch,
 - `instances_dense x 6`: retry timestamp `2026-08-08-21-38-37`, exit `0`, runtime `674.6851348876953 s`, raw shape `(64,64,24)`, paths SHA-256 `987A02E9F649BF65BAF15B482EB449B187C8BB43B1D69C1A905209C001DF90A0`.
 - `instances_dense x 9`: retry timestamp `2026-08-08-21-50-11`, exit `0`, runtime `1476.3706541061401 s`, raw shape `(64,64,36)`, paths SHA-256 `0CEB8562E06A179E8E378DB52479F275D438AC58F7A9223EC0422A746B956F40`.
 - Both retry raw outputs passed finite, shape, official collision, and start/goal sanity checks. Prior failed attempt logs remain committed and referenced in the updated manifest.
+
+## S2-R0 Baseline Metric Contract Parity Freeze
+
+- TASK_ID: `S2-R0-SMD-BASELINE-METRIC-CONTRACT-PARITY-FREEZE-R1`
+- DATE: 2026-08-09
+- S1 closeout: `main` was advanced to `b68212d5f5e7ede4d001d68a40378d2cdf4647fa` by `--ff-only`; annotated tag `smd-baseline-ready` points to the same commit. The S2 work is isolated on `repro/s2-metric-contract`.
+- Official metric source head: `c87fc76044b350a37fcea7afc468c13c8371a237`.
+- Source audit: `docs/METRIC_SOURCE_AUDIT.md`; shared contract: `docs/EXPERIMENT_CONTRACT.md`.
+- Frozen semantics: candidate `0`; state dimension `4*N`; position first `2*N`; velocity last `2*N`; official collision radius `0.05`; official collision threshold `1e-3`; mean path length over agents; official discrete velocity-change metric without division by `dt`; planning time around `planner.plan(...)`; wrapper wall runtime separate.
+- The nine accepted S1 raw runs were evaluated without rerunning the matrix. Baseline metrics are in `experiments/summaries/baseline_metrics.csv`; all nine rows have raw output, finite paths, official collision-free status, and planning success.
+- Collision parity was `9/9` with zero boolean mismatches. Path-length parity passed with maximum absolute error `9.5367431640625e-07`; acceleration parity passed with maximum absolute error `3.5762786865234375e-07`; both used a fixed `1e-6` tolerance.
+- One permitted 3-agent runtime parity retry was completed in `instances_simple`, `idx0`, using the official checkpoint and defaults. Parsed official planning time was `16.81274962425232 s`; external wall runtime was `26.1729535 s`; the complete stdout is preserved in `experiments/summaries/s2_runtime_parity_stdout_retry.txt`.
+- The first runtime wrapper attempt created raw output but failed to save stdout because of a relative log-path error. It is retained and classified as `INFRASTRUCTURE_FAILURE`; one identical retry was used, with no parameter or input change.
+- Machine-readable parity table: `experiments/summaries/official_vs_reproduced_table.csv`; parity summary: `experiments/summaries/metric_parity_results.json`; contract manifest: `experiments/manifests/s2_metric_contract.json`.
+- This task remains planning-level metric contract work only. S3 quadrotor, dynamics, wind, closed-loop, fixed-margin SMD, TR-SMD projection, multi-seed benchmark, retraining, and paper claims remain frozen.

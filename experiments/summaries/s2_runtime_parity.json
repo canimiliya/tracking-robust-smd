@@ -1,0 +1,28 @@
+{
+  "task_id": "S2-R0-SMD-BASELINE-METRIC-CONTRACT-PARITY-FREEZE-R1",
+  "map_name": "instances_simple",
+  "num_agents": 3,
+  "instance_idx": 0,
+  "checkpoint": "official pretrained checkpoint",
+  "algorithm_parameters": "S1 frozen defaults",
+  "candidate_index": 0,
+  "parent_attempt_id": "s2_runtime_parity_20260809T011507",
+  "parent_attempt": {
+    "failure_class": "INFRASTRUCTURE_FAILURE",
+    "status": "RAW_RESULT_CREATED_BUT_STDOUT_NOT_SAVED",
+    "reason": "Initial wrapper used a log path relative to scripts/inference; the log directory did not exist.",
+    "result_dir": "scripts/inference/results_s2_runtime_parity/2026-08-09-01-15-07/instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom/num_agents___3/planner___SMDComposite/single_agent_planner___SMDEnsemble/0"
+  },
+  "retry_attempt_id": "s2_runtime_parity_20260809T011633",
+  "retry_status": "PASS",
+  "retry_result_dir": "scripts/inference/results_s2_runtime_parity/2026-08-09-01-16-33/instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom/num_agents___3/planner___SMDComposite/single_agent_planner___SMDEnsemble/0",
+  "stdout_log": "experiments/summaries/s2_runtime_parity_stdout_retry.txt",
+  "wrapper_exit_code": 0,
+  "planning_time_s": 16.81274962425232,
+  "wall_runtime_s": 26.1729535,
+  "planning_time_le_wall_runtime": true,
+  "paths_shape": [64, 64, 12],
+  "paths_dtype": "float32",
+  "paths_sha256": "76024E724A2F51E4891B6EEC602E2DA060DEAD504AC23BC5C89D6F9020BB53FB",
+  "map_info_sha256": "0EB1AD3F2261B225F4DA75F94C3F78630587DCB286218F09EBC048D574AB2CD8"
+}
