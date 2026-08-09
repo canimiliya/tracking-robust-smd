@@ -21,3 +21,7 @@ Inter-agent clearance is `||p_i-p_j|| - 0.10 m`. Agent-obstacle clearance is `||
 Phase A reuses the accepted S1/S2 3-map by 3/6/9-agent matrix without replanning. Candidates are ranked from objective predeclared quantities: eligibility, actual minimum clearance, and clearance loss. If calm evidence is insufficient, official candidate-0 trajectories from existing maps and instances may be screened by nominal clearance and dynamic feasibility before closed-loop execution. Disturbance outcomes require a frozen disturbance contract; formal multi-instance confirmation requires a frozen statistical contract.
 
 Tracking RMSE is diagnostic. The primary endpoint is strict collision of the actual trajectory after a strictly safe, dynamically feasible nominal reference.
+
+## Frozen calm candidate family
+
+The objective calm screen found its first eligible collision at `instances_dense`, 3 agents, instance 3. The candidate family is therefore frozen as `instances_dense / 3 agents / D0_CALM`. No disturbance is introduced. Prospective confirmation uses the separately frozen `S4_GAP_STATISTICAL_CONTRACT.md`.
