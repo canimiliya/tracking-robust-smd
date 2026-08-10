@@ -1,0 +1,200 @@
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        
+[WinError 206] 文件名或扩展名太长。: 'D:\\Desktop\\my_project\\TR-SMD\\scripts\\inference\\results_s4_confirmation_dense3_idx5_24\\2026-08-09-11-19-27\\instance_name___EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom\\num_agents___3\\planner___SMDComposite\\single_agent_planner___SMDEnsemble\\0'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-11-19-27
+            Trial Number: 0
+            Num Agents: 3
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeThreePlanarDiskRandom
+        

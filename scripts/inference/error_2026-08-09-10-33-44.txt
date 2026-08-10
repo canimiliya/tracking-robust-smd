@@ -1,0 +1,10 @@
+No executable found for solver 'ipopt'This is for single_trial_config: 
+        Trial Config:
+            Time Str: 2026-08-09-10-33-44
+            Trial Number: 0
+            Num Agents: 9
+            Stagger Start Time: 0
+            Multi-agent Planner Class: SMDComposite
+            Single Agent Planner: SMDEnsemble
+            Instance: EnvEmptyNoWait2DRobotCompositeNinePlanarDiskRandom
+        
