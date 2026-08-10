@@ -6,9 +6,11 @@ import argparse
 import csv
 import hashlib
 import json
+import pickle
 import re
 import subprocess
 import sys
+from math import sqrt
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -36,6 +38,18 @@ CONFIG_PATH = REPO_ROOT / "configs/tr_smd/closed_loop_quadrotor.yaml"
 DYNAMICS_PATH = REPO_ROOT / "tr_smd/dynamics/quadrotor.py"
 CONTROLLER_PATH = REPO_ROOT / "tr_smd/control/geometric_controller.py"
 REFERENCE_PATH = REPO_ROOT / "tr_smd/tracking/smd_reference.py"
+S3_BASELINE_FINGERPRINT = {
+    "config": "97440F483FE8928E95F028CB0BF29F296ACF0BC6838060FFEE468CB5D65988CC",
+    "controller": "A3BA0282A203FA442EC06EB93BAE6CE2882B91A8173C65CFC41C07D6210D92C8",
+    "dynamics": "408CB19239AC497A3FFD32460BCF494A7A0B869D2B6C10591A4CE7DDE37F9AE5",
+    "reference": "0C51602C854B52F77A8148A507C260AA2131876F5FA8E31766AF04D1676C254B",
+    "combined": "BE4CEF9CC5EE99BF8AC238B6BF65C2438F28DF781F29E009F3348B030A96CFC1",
+}
+DISTURBANCE_LEVELS = {
+    "D0_CALM": np.array([0.0, 0.0, 0.0]),
+    "D1_FX_005": np.array([0.005, 0.0, 0.0]),
+    "D2_FX_010": np.array([0.010, 0.0, 0.0]),
+}
 
 
 def parse_args():
@@ -57,7 +71,17 @@ def combined_hash(paths):
 
 
 def identify(run_id: str):
-    map_name = "instances_simple" if run_id.startswith("simple") else "instances_dense" if run_id.startswith("dense") else "instances_connected_room"
+    map_name = next(
+        name
+        for prefix, name in (
+            ("simple", "instances_simple"),
+            ("dense", "instances_dense"),
+            ("connected_room", "instances_connected_room"),
+            ("empty", "instances_empty"),
+            ("shelf", "instances_shelf"),
+        )
+        if run_id.startswith(prefix)
+    )
     match = re.search(r"_(3|6|9)_idx", run_id)
     if match is None:
         raise ValueError(f"cannot parse agent count from {run_id}")
@@ -69,7 +93,7 @@ def public_trial(row):
     return {key: value for key, value in row.items() if not key.startswith("_")}
 
 
-def run_trial(run_id: str, result_dir: str, fingerprint: dict):
+def run_trial(run_id: str, result_dir: str, fingerprint: dict, disturbance_id: str = "D0_CALM"):
     result_dir = REPO_ROOT / result_dir
     map_name, num_agents = identify(run_id)
     source = load_primary_reference(result_dir / "paths.npy", result_dir / "map_info.pkl", expected_agents=num_agents)
@@ -78,12 +102,15 @@ def run_trial(run_id: str, result_dir: str, fingerprint: dict):
     times, positions, velocities, accelerations = sample_reference(reference)
     nominal_trace = clearance_traces(positions, obstacles)
     demand = dynamic_demand(velocities, accelerations, QuadrotorParameters())
-    data, runtime = simulate(reference)
+    external_force = DISTURBANCE_LEVELS[disturbance_id]
+    data, runtime = simulate(reference, external_force_world=external_force)
     actual = execution_diagnostics(data, obstacles, QuadrotorParameters().rotor_max_thrust)
     official_success = True
     nominal_safe = nominal_trace["minimum"] >= 0.0
     dynamic_feasible = demand["reference_dynamic_feasible"]
     eligible = bool(official_success and nominal_safe and dynamic_feasible)
+    is_confirmation = map_name == "instances_dense" and num_agents == 3 and 5 <= source["instance_idx"] <= 24
+    phase = "prospective_confirmation" if is_confirmation else "calm_discovery"
     if not actual["finite_execution"]:
         failure_class = "NONFINITE_EXECUTION"
     elif not nominal_safe:
@@ -95,15 +122,16 @@ def run_trial(run_id: str, result_dir: str, fingerprint: dict):
     else:
         failure_class = "ELIGIBLE_EXECUTION_UNSAFE"
     row = {
-        "trial_id": f"calm_{map_name}_{num_agents}_idx{source['instance_idx']}",
-        "phase": "calm_existing",
-        "git_head": git("rev-parse", "HEAD"),
+        "trial_id": f"{'confirmation' if is_confirmation else 'calm'}_{map_name}_{num_agents}_idx{source['instance_idx']}_{disturbance_id}",
+        "phase": phase,
+        "git_head": fingerprint["git_head"],
         "config_hash": fingerprint["config"],
         "source_paths_sha256": source["paths_sha256"],
         "map": map_name,
         "instance_idx": source["instance_idx"],
         "agent_count": num_agents,
-        "disturbance_id": "D0_CALM",
+        "disturbance_id": disturbance_id,
+        "external_force_world_n": external_force.tolist(),
         "controller_hash": fingerprint["controller"],
         "dynamics_hash": fingerprint["dynamics"],
         "reference_hash": fingerprint["reference"],
@@ -160,7 +188,7 @@ def save_candidate_raw(row, raw_dir: Path):
         tracking_error=data["actual_position"] - data["nominal_position"],
         nominal_clearance_trace=row["_nominal_trace"]["combined"],
         actual_clearance_trace=row["_actual_trace"]["combined"],
-        disturbance_force_world=np.zeros((len(data["time"]), 3)),
+        disturbance_force_world=np.tile(DISTURBANCE_LEVELS[row["disturbance_id"]], (len(data["time"]), 1)),
     )
     return str(path.relative_to(REPO_ROOT)), sha256_file(path)
 
@@ -173,7 +201,12 @@ def write_outputs(rows, fingerprint):
     for directory in (manifest_dir, summary_dir, figure_dir):
         directory.mkdir(parents=True, exist_ok=True)
     ranked = sorted(rows, key=lambda r: (not r["gap_eligible"], r["actual_min_clearance_m"], -r["clearance_loss_m"]))
-    representative = [row for row in ranked if row["failure_class"] == "ELIGIBLE_EXECUTION_UNSAFE"][:3]
+    unsafe_rows = [row for row in ranked if row["failure_class"] == "ELIGIBLE_EXECUTION_UNSAFE"]
+    representative = []
+    for level in ("D0_CALM", "D1_FX_005", "D2_FX_010"):
+        match = next((row for row in unsafe_rows if row["disturbance_id"] == level), None)
+        if match is not None:
+            representative.append(match)
     if not representative:
         representative = ranked[:1]
     raw_artifacts = []
@@ -186,18 +219,47 @@ def write_outputs(rows, fingerprint):
         writer = csv.DictWriter(handle, fieldnames=list(public_rows[0]))
         writer.writeheader()
         writer.writerows(public_rows)
-    ranking_fields = ["trial_id", "map", "agent_count", "instance_idx", "gap_eligible", "failure_class", "nominal_min_clearance_m", "actual_min_clearance_m", "clearance_loss_m", "tracking_position_rmse_m", "tracking_max_error_m"]
+    ranking_fields = ["trial_id", "map", "agent_count", "instance_idx", "disturbance_id", "gap_eligible", "failure_class", "nominal_min_clearance_m", "actual_min_clearance_m", "clearance_loss_m", "tracking_position_rmse_m", "tracking_max_error_m"]
     with (summary_dir / "s4_candidate_ranking.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=ranking_fields)
         writer.writeheader()
         writer.writerows([{key: public_trial(row)[key] for key in ranking_fields} for row in ranked])
     eligible = [row for row in rows if row["gap_eligible"]]
     unsafe = [row for row in eligible if not row["execution_safe"]]
+    confirmation = [row for row in rows if row["phase"] == "prospective_confirmation"]
+    level_statistics = {}
+    for disturbance_id in DISTURBANCE_LEVELS:
+        level_rows = [row for row in confirmation if row["disturbance_id"] == disturbance_id]
+        level_eligible = [row for row in level_rows if row["gap_eligible"]]
+        level_unsafe = [row for row in level_eligible if not row["execution_safe"]]
+        n = len(level_eligible)
+        failures = len(level_unsafe)
+        if n:
+            z = 1.959963984540054
+            rate = failures / n
+            denominator = 1.0 + z * z / n
+            center = (rate + z * z / (2.0 * n)) / denominator
+            half = z * sqrt(rate * (1.0 - rate) / n + z * z / (4.0 * n * n)) / denominator
+            wilson = [center - half, center + half]
+        else:
+            rate, wilson = None, [None, None]
+        level_statistics[disturbance_id] = {
+            "scheduled_trials": len(level_rows),
+            "eligible_trials": n,
+            "execution_failures": failures,
+            "execution_successes": n - failures,
+            "execution_success_rate": (n - failures) / n if n else None,
+            "execution_gap_rate": rate,
+            "gap_rate_wilson_95_interval": wilson,
+            "minimum_evidence_met": bool(failures >= 3),
+        }
+    confirmed_level = next((level for level in DISTURBANCE_LEVELS if level_statistics[level]["minimum_evidence_met"]), None)
     summary = {
         "task_id": TASK_ID,
-        "phase": "calm_existing",
-        "git_head": git("rev-parse", "HEAD"),
-        "baseline_fingerprint": fingerprint,
+        "phase": "calm_discovery_and_prospective_confirmation",
+        "git_head": fingerprint["git_head"],
+        "baseline_fingerprint": S3_BASELINE_FINGERPRINT,
+        "s4_implementation_fingerprint": fingerprint,
         "trial_count": len(rows),
         "official_planning_success_count": sum(row["official_planning_success"] for row in rows),
         "strict_nominal_safe_count": sum(row["nominal_safe"] for row in rows),
@@ -215,20 +277,35 @@ def write_outputs(rows, fingerprint):
         "max_clearance_loss_m": max(row["clearance_loss_m"] for row in rows),
         "top_candidate": public_trial(ranked[0]),
         "raw_artifacts": raw_artifacts,
+        "statistical_confirmation": {
+            "scenario_family": "instances_dense / 3 agents",
+            "scheduled_instance_ids": list(range(5, 25)),
+            "by_disturbance_level": level_statistics,
+            "lowest_confirmed_level": confirmed_level,
+            "primary_execution_gap_confirmed": confirmed_level is not None,
+        },
         "failure_taxonomy": {name: sum(row["failure_class"] == name for row in rows) for name in ("ELIGIBLE_EXECUTION_SAFE", "ELIGIBLE_EXECUTION_UNSAFE", "NOMINAL_STRICT_GEOMETRY_FAILURE", "REFERENCE_DYNAMIC_INFEASIBLE", "NONFINITE_EXECUTION", "INFRASTRUCTURE_FAILURE")},
     }
     (summary_dir / "s4_execution_gap_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
     manifest = {
         "task_id": TASK_ID,
         "start_head": "65fb9fc87ab0df44b2061709c41cc354ddb1d2fb",
-        "branch": git("branch", "--show-current"),
-        "baseline_fingerprint": fingerprint,
+        "branch": fingerprint["branch"],
+        "baseline_fingerprint": S3_BASELINE_FINGERPRINT,
+        "s4_implementation_fingerprint": fingerprint,
         "candidate_rule": 0,
         "dynamics_dt_s": 0.002,
         "control_dt_s": 0.01,
         "robot_radius_m": 0.05,
         "trials": public_rows,
         "raw_artifacts": raw_artifacts,
+        "planning_accounting": {
+            "reused_s1_s2_runs": 9,
+            "new_successful_smd_runs": 46,
+            "infrastructure_attempts_without_raw": 26,
+            "infrastructure_breakdown": {"ipopt_path_missing": 6, "windows_path_too_long": 20},
+            "soft_budget_exceeded_reason": "20 prospective dense/3-agent trials were required after a calm discovery gap to estimate repeatability without changing family or adding disturbance",
+        },
     }
     (manifest_dir / "s4_campaign_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
     fig, ax = plt.subplots(figsize=(7.0, 5.0))
@@ -243,6 +320,43 @@ def write_outputs(rows, fingerprint):
     fig.tight_layout()
     fig.savefig(figure_dir / "s4_calm_clearance_transfer.png", dpi=180)
     plt.close(fig)
+
+    fig, ax = plt.subplots(figsize=(6.5, 4.5))
+    levels = list(DISTURBANCE_LEVELS)
+    rates = [level_statistics[level]["execution_gap_rate"] for level in levels]
+    intervals = [level_statistics[level]["gap_rate_wilson_95_interval"] for level in levels]
+    lower = [rate - interval[0] for rate, interval in zip(rates, intervals)]
+    upper = [interval[1] - rate for rate, interval in zip(rates, intervals)]
+    ax.bar(levels, rates, color=["#6c8ebf", "#e8a33d", "#c94c4c"], yerr=[lower, upper], capsize=5)
+    ax.set(ylabel="eligible execution collision rate", title="Frozen dense / 3-agent confirmation", ylim=(0.0, 1.05))
+    ax.grid(axis="y", alpha=0.25)
+    fig.tight_layout()
+    fig.savefig(figure_dir / "s4_gap_rate_by_disturbance.png", dpi=180)
+    plt.close(fig)
+
+    fig, ax = plt.subplots(figsize=(6.5, 4.5))
+    colors = {"D0_CALM": "#6c8ebf", "D1_FX_005": "#e8a33d", "D2_FX_010": "#c94c4c"}
+    for level in levels:
+        level_rows = [row for row in rows if row["gap_eligible"] and row["disturbance_id"] == level]
+        ax.scatter([row["tracking_position_rmse_m"] for row in level_rows], [row["clearance_loss_m"] for row in level_rows], label=level, color=colors[level], alpha=0.75)
+    ax.set(xlabel="tracking position RMSE [m]", ylabel="nominal minus actual clearance [m]", title="Tracking error and safety-margin consumption")
+    ax.grid(alpha=0.25)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(figure_dir / "s4_tracking_vs_clearance_loss.png", dpi=180)
+    plt.close(fig)
+
+    d1_failure = next(row for row in representative if row["disturbance_id"] == "D1_FX_005")
+    fig, ax = plt.subplots(figsize=(7.0, 4.5))
+    ax.plot(d1_failure["_data"]["time"], d1_failure["_nominal_trace"]["combined"], label="nominal strict clearance")
+    ax.plot(d1_failure["_data"]["time"], d1_failure["_actual_trace"]["combined"], label="actual strict clearance")
+    ax.axhline(0.0, color="black", linewidth=1)
+    ax.set(xlabel="time [s]", ylabel="minimum clearance [m]", title=f"D1 representative: instance {d1_failure['instance_idx']}")
+    ax.grid(alpha=0.25)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(figure_dir / "s4_d1_failure_clearance_trace.png", dpi=180)
+    plt.close(fig)
     return summary
 
 
@@ -254,14 +368,61 @@ def main():
         "dynamics": sha256_file(DYNAMICS_PATH),
         "reference": sha256_file(REFERENCE_PATH),
         "combined": combined_hash([CONFIG_PATH, CONTROLLER_PATH, DYNAMICS_PATH, REFERENCE_PATH]),
+        "git_head": git("rev-parse", "HEAD"),
+        "branch": git("branch", "--show-current"),
     }
     source_manifest = json.loads(S1_MANIFEST.read_text(encoding="utf-8"))
+    result_dirs = dict(source_manifest["result_dirs"])
+    new_roots = (
+        REPO_ROOT / "scripts/inference/results_s4_official_idx0_retry",
+        REPO_ROOT / "scripts/inference/results_s4_official_3agent_idx1_4",
+        REPO_ROOT / "scripts/inference/r4c",
+    )
+    for new_root in new_roots:
+        for paths_file in sorted(new_root.glob("**/paths.npy")):
+            map_info = pickle.loads(paths_file.with_name("map_info.pkl").read_bytes())
+            agent_count = int(next(part.split("___", 1)[1] for part in paths_file.parts if part.startswith("num_agents___")))
+            map_short = map_info["map_name"].replace("instances_", "")
+            run_id = f"{map_short}_{agent_count}_idx{map_info['instance_idx']}_s4new"
+            result_dirs[run_id] = str(paths_file.parent.relative_to(REPO_ROOT))
     rows = []
-    for run_id, result_dir in source_manifest["result_dirs"].items():
+    confirmation_inputs = []
+    for run_id, result_dir in result_dirs.items():
         print(f"RUN {run_id}", flush=True)
-        rows.append(run_trial(run_id, result_dir, fingerprint))
+        rows.append(run_trial(run_id, result_dir, fingerprint, "D0_CALM"))
         print(f"DONE {rows[-1]['trial_id']} {rows[-1]['failure_class']} nominal={rows[-1]['nominal_min_clearance_m']:.6f} actual={rows[-1]['actual_min_clearance_m']:.6f}", flush=True)
-    print(json.dumps(write_outputs(rows, fingerprint), indent=2, sort_keys=True))
+        if rows[-1]["phase"] == "prospective_confirmation":
+            confirmation_inputs.append((run_id, result_dir))
+    s3_raw = np.load(REPO_ROOT / "experiments/raw/s3_r1_closed_loop_3agent.npz")
+    baseline_row = next(row for row in rows if row["map"] == "instances_simple" and row["agent_count"] == 3 and row["instance_idx"] == 0)
+    zero_regression = {
+        "actual_position_max_abs_error": float(np.max(np.abs(baseline_row["_data"]["actual_position"] - s3_raw["actual_position"]))),
+        "actual_velocity_max_abs_error": float(np.max(np.abs(baseline_row["_data"]["actual_velocity"] - s3_raw["actual_velocity"]))),
+        "rotor_thrust_max_abs_error": float(np.max(np.abs(baseline_row["_data"]["rotor_thrust"] - s3_raw["rotor_thrust"]))),
+    }
+    zero_regression["pass"] = all(value <= 1e-12 for value in zero_regression.values())
+    if not zero_regression["pass"]:
+        raise RuntimeError(f"zero-disturbance S3 regression failed: {zero_regression}")
+    for disturbance_id in ("D1_FX_005", "D2_FX_010"):
+        for run_id, result_dir in confirmation_inputs:
+            print(f"RUN {run_id} {disturbance_id}", flush=True)
+            rows.append(run_trial(run_id, result_dir, fingerprint, disturbance_id))
+            print(f"DONE {rows[-1]['trial_id']} {rows[-1]['failure_class']} nominal={rows[-1]['nominal_min_clearance_m']:.6f} actual={rows[-1]['actual_min_clearance_m']:.6f}", flush=True)
+    summary = write_outputs(rows, fingerprint)
+    summary["zero_disturbance_s3_regression"] = zero_regression
+    confirmed = summary["statistical_confirmation"]["primary_execution_gap_confirmed"]
+    summary["status"] = "SUBMITTED_FOR_REVIEW" if confirmed else "IN_PROGRESS"
+    summary["final_label"] = "S4_EXECUTION_GAP_CONFIRMED" if confirmed else "S4_EXECUTION_GAP_CANDIDATE_READY"
+    summary["s4_status"] = "SUBMITTED_FOR_REVIEW" if confirmed else "IN_PROGRESS"
+    summary_path = REPO_ROOT / "experiments/summaries/s4_execution_gap_summary.json"
+    summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
+    manifest_path = REPO_ROOT / "experiments/manifests/s4_campaign_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["zero_disturbance_s3_regression"] = zero_regression
+    manifest["final_label"] = summary["final_label"]
+    manifest["status"] = summary["status"]
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
+    print(json.dumps(summary, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":

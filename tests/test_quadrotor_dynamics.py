@@ -39,3 +39,19 @@ def test_quaternion_normalization_after_rk4():
     state = QuadrotorState.from_position([0, 0, 1]).as_vector()
     out = dynamics.rk4_step(state, np.array([dynamics.params.mass * dynamics.params.gravity, 0, 0, 0]), 0.002)
     assert abs(np.linalg.norm(out[6:10]) - 1.0) <= 1e-8
+
+
+def test_zero_disturbance_interface_is_exact():
+    dynamics = QuadrotorDynamics()
+    state = QuadrotorState.from_position(np.array([0.2, -0.1, 1.0])).as_vector()
+    wrench = np.array([dynamics.params.mass * dynamics.params.gravity, 0.0, 0.0, 0.0])
+    baseline = dynamics.rk4_step(state, wrench, 0.002)
+    with_zero = dynamics.rk4_step(state, wrench, 0.002, np.zeros(3), np.zeros(3))
+    assert np.array_equal(baseline, with_zero)
+
+
+def test_external_force_acceleration_direction():
+    dynamics = QuadrotorDynamics()
+    state = QuadrotorState.from_position(np.zeros(3)).as_vector()
+    derivative = dynamics.derivative(state, np.zeros(4), external_force_world=np.array([0.01, 0.0, 0.0]))
+    assert derivative[3] == 0.01 / dynamics.params.mass

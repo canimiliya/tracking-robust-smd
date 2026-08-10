@@ -115,23 +115,40 @@ class QuadrotorDynamics:
         self.params = params or QuadrotorParameters()
         self.gravity_world = np.array([0.0, 0.0, -self.params.gravity])
 
-    def derivative(self, state_vector: np.ndarray, actual_wrench: np.ndarray) -> np.ndarray:
+    def derivative(
+        self,
+        state_vector: np.ndarray,
+        actual_wrench: np.ndarray,
+        external_force_world: np.ndarray | None = None,
+        external_moment_body: np.ndarray | None = None,
+    ) -> np.ndarray:
         state = QuadrotorState.from_vector(state_vector)
         p = self.params
         R = quat_to_rotation(state.quaternion)
         total_thrust, moment = float(actual_wrench[0]), np.asarray(actual_wrench[1:4], dtype=float)
         acceleration = self.gravity_world + R @ np.array([0.0, 0.0, total_thrust / p.mass])
+        if external_force_world is not None:
+            acceleration = acceleration + np.asarray(external_force_world, dtype=float) / p.mass
         qdot = quat_derivative(state.quaternion, state.body_rate)
         J = p.inertia_matrix
+        if external_moment_body is not None:
+            moment = moment + np.asarray(external_moment_body, dtype=float)
         omega_dot = np.linalg.solve(J, moment - np.cross(state.body_rate, J @ state.body_rate))
         return np.concatenate([state.velocity, acceleration, qdot, omega_dot])
 
-    def rk4_step(self, state_vector: np.ndarray, actual_wrench: np.ndarray, dt: float) -> np.ndarray:
+    def rk4_step(
+        self,
+        state_vector: np.ndarray,
+        actual_wrench: np.ndarray,
+        dt: float,
+        external_force_world: np.ndarray | None = None,
+        external_moment_body: np.ndarray | None = None,
+    ) -> np.ndarray:
         x = np.asarray(state_vector, dtype=float)
-        k1 = self.derivative(x, actual_wrench)
-        k2 = self.derivative(x + 0.5 * dt * k1, actual_wrench)
-        k3 = self.derivative(x + 0.5 * dt * k2, actual_wrench)
-        k4 = self.derivative(x + dt * k3, actual_wrench)
+        k1 = self.derivative(x, actual_wrench, external_force_world, external_moment_body)
+        k2 = self.derivative(x + 0.5 * dt * k1, actual_wrench, external_force_world, external_moment_body)
+        k3 = self.derivative(x + 0.5 * dt * k2, actual_wrench, external_force_world, external_moment_body)
+        k4 = self.derivative(x + dt * k3, actual_wrench, external_force_world, external_moment_body)
         out = x + dt * (k1 + 2 * k2 + 2 * k3 + k4) / 6.0
         out[6:10] = quat_normalize(out[6:10])
         return out

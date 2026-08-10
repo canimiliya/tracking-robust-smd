@@ -96,7 +96,11 @@ def dynamic_demand(velocity: np.ndarray, acceleration: np.ndarray, params: Quadr
     }
 
 
-def simulate(reference: PositionConsistentHermiteReference) -> tuple[dict, float]:
+def simulate(
+    reference: PositionConsistentHermiteReference,
+    external_force_world: np.ndarray | None = None,
+    external_moment_body: np.ndarray | None = None,
+) -> tuple[dict, float]:
     params = QuadrotorParameters()
     controller = GeometricController(params, ControllerConfig())
     dynamics = QuadrotorDynamics(params)
@@ -130,7 +134,13 @@ def simulate(reference: PositionConsistentHermiteReference) -> tuple[dict, float
             for i in range(n):
                 held_thrust[i] = controller.command(states[i], p_ref[i], v_ref[i], a_ref[i], yaw_ref=0.0)["thrust"]
         for i in range(n):
-            states[i] = dynamics.rk4_step(states[i], controller.allocator.matrix @ held_thrust[i], DYNAMICS_DT_S)
+            states[i] = dynamics.rk4_step(
+                states[i],
+                controller.allocator.matrix @ held_thrust[i],
+                DYNAMICS_DT_S,
+                external_force_world=external_force_world,
+                external_moment_body=external_moment_body,
+            )
     runtime = perf_counter() - started
     return {
         "time": time,
