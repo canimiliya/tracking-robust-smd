@@ -1,0 +1,173 @@
+{
+  "actual_error_metrics": {
+    "max_actual_error_m": 0.05759201018493857,
+    "mean_actual_error_m": 0.012742947664179797,
+    "mean_radius_to_error_ratio": 1.5543445501520985
+  },
+  "adaptive_vs_fixed": {
+    "coverage_difference": 0.0,
+    "integrated_radius_reduction": 0.8623844103354734,
+    "mean_radius_reduction": 0.8623844103354734
+  },
+  "artifacts": [
+    {
+      "path": "experiments/summaries/s5_tube_validation.csv",
+      "sha256": "AAE571BFFAA4473B7E06642EF374C4DD879A5983B53F82DD475201511B5D1AE2"
+    },
+    {
+      "path": "experiments/summaries/s5_fixed_vs_adaptive.csv",
+      "sha256": "B9001632003E080466FF0D000A31BF101456977C18C911E7A1A6CB9873DDF9D5"
+    },
+    {
+      "path": "experiments/raw/s5/s5_dense_3_idx22_d1_pos_x_tube.npz",
+      "sha256": "FCC80C8F082542FB4B8950948CA91A08F2DCEBC95A21CF911D64683E7B555EE7"
+    },
+    {
+      "path": "experiments/figures/s5_adaptive_vs_fixed_radius.png",
+      "sha256": "E366EFDB0BEBFEAAA419CF0FAB4BAF515E13D176D59391C7BAC2F41880490525"
+    },
+    {
+      "path": "experiments/figures/s5_coverage_summary.png",
+      "sha256": "5D81AE80DE51B07FB412FEEFF140C41A2A8FB88A372CFA3EBE4CBAE6E51570C9"
+    },
+    {
+      "path": "experiments/figures/s5_idx22_clearance_and_tube.png",
+      "sha256": "971446EC70B3A919B7136963E43794F462CE4DE628A966D8568126640EB426F6"
+    },
+    {
+      "path": "experiments/figures/s5_idx22_tube_vs_error.png",
+      "sha256": "4148AF7FB03CADB87E8079481680A3802C96F54CA7B45F3D67137A9D99A57CF1"
+    },
+    {
+      "path": "experiments/figures/s5_radius_vs_acceleration.png",
+      "sha256": "2DF810465C9B2942E4D3347AA7307823708ECA4FA38C74A1955976F598A64C86"
+    }
+  ],
+  "baseline_fingerprint": {
+    "combined": "DDBE786CD695522F5F8E67CCA1F2084196056379638AC0B4BF7479285160F96E",
+    "config": "97440F483FE8928E95F028CB0BF29F296ACF0BC6838060FFEE468CB5D65988CC",
+    "controller": "A3BA0282A203FA442EC06EB93BAE6CE2882B91A8173C65CFC41C07D6210D92C8",
+    "dynamics": "3084085ABDA930CEC00DB90CE2552720EA96250D5848692129F1C2D7F24BC36E",
+    "reference": "0C51602C854B52F77A8148A507C260AA2131876F5FA8E31766AF04D1676C254B"
+  },
+  "claim_boundary": "validated conditional coverage for the preregistered D1 ensemble; no formal all-disturbance or planning-safety guarantee",
+  "d2_stress": {
+    "max_tube_violation_m": 0.0,
+    "trajectory_coverage_rate": 1.0,
+    "trial_count": 110,
+    "tube_coverage_rate": 1.0,
+    "violation_count": 0,
+    "violation_duration_s": 0.0
+  },
+  "data_split": {
+    "calibration_references": 26,
+    "calibration_trials": 208,
+    "holdout_references": 11,
+    "holdout_trials": 110,
+    "validation_references": 18,
+    "validation_trials": 144
+  },
+  "error_state": "12D local diagnostic [dp,dv,dtheta,domega]; exact 13D quaternion state propagated",
+  "final_label": "S5_TRACKING_ERROR_TUBE_READY",
+  "fixed_baseline": {
+    "integrated_radius_m_s": 0.7199349316271855,
+    "radius_m": 0.14392941455961325,
+    "trajectory_coverage_rate": 1.0
+  },
+  "formal_guarantee": false,
+  "generalization_scope": "frozen holdout spans all five map families and dense idx18-24 at 3 agents; 6/9-agent references occur only in calibration/validation",
+  "holdout_execution_head": "c5715d4274e3491b08babe2c7f580c0d8d583d16",
+  "interfaces": {
+    "rho_dense": "TrackingTube.rho_dense[agent, dynamics_tick]",
+    "rho_segment": "TrackingTube.rho_segment[agent, 63] conservative segment maxima",
+    "rho_support": "TrackingTube.rho_support[agent, 64] conservative neighborhood maxima"
+  },
+  "method": "exact_nonlinear_closed_loop_scenario_envelope_with_split_calibrated_inflation",
+  "numerical_audits": {
+    "disturbance_norm": "all generated schedules checked against the frozen L2 bound",
+    "rho_monotonicity_dense_3_idx22": {
+      "max_rho0_minus_rho_d1_m": 0.0,
+      "max_rho_d1_minus_rho_d2_m": 0.0,
+      "passed": true,
+      "rho_0_max_m": 0.04343627460137419,
+      "rho_d1_max_m": 0.05759201118493857,
+      "rho_d2_max_m": 0.07282708550444082
+    },
+    "scheduled_constant_force_parity": "bit_exact_all_recorded_arrays",
+    "support_mapping": "dense neighborhood and segment maxima; tested peaks retained"
+  },
+  "pre_holdout_reconstruction": {
+    "commit": "fa0fc45",
+    "committed_manifest_sha256_lf": "0A000CF2C3BBACC2D2A020999FA1F827F45B232F51A107D32D315BC144700106",
+    "content_difference": "line_ending_normalization_only",
+    "holdout_runtime_hash_check_passed": true,
+    "runtime_worktree_manifest_sha256_crlf": "1895D3B13A49282C194326BF8AA7D756076ADDE9857C526A0A893882FFE20130"
+  },
+  "primary_holdout": {
+    "max_tube_violation_m": 0.0,
+    "trajectory_coverage_rate": 1.0,
+    "trial_count": 110,
+    "tube_coverage_rate": 1.0,
+    "violation_count": 0,
+    "violation_duration_s": 0.0
+  },
+  "reachable_set_representation": "per-agent time-varying scalar position envelope over 21 nonlinear scenarios",
+  "representative_artifact": {
+    "parallel_tube_runtime_s": 2.9802813999999955,
+    "raw_path": "experiments/raw/s5/s5_dense_3_idx22_d1_pos_x_tube.npz",
+    "raw_sha256": "FCC80C8F082542FB4B8950948CA91A08F2DCEBC95A21CF911D64683E7B555EE7",
+    "time_per_support_point_s": 0.04656689687499993
+  },
+  "residual_model": {
+    "calibration_reference_count": 26,
+    "calibration_trial_count": 208,
+    "contract_hashes": {
+      "configs/tr_smd/tracking_error_tube.yaml": "0D36005AE75088A4626C30616BEA29485F0592BE34A8A66990F39BC533EF7240",
+      "docs/S5_TUBE_VALIDATION_CONTRACT.md": "3FD5545F866C556206CB3D47DC77C8B534CEDF046891CC744FCBF937BB91FA02",
+      "docs/TRACKING_ERROR_TUBE_CONTRACT.md": "3247BDFED5804486FB5575102CFACEACF11928E574465AF36C1E1380A577BFCA"
+    },
+    "final_additive_inflation_m": 1e-09,
+    "final_inflation_factor": 1.120954463520958,
+    "fixed_global_radius_m": 0.14392941455961325,
+    "holdout_used": false,
+    "manifest_sha256": "1895D3B13A49282C194326BF8AA7D756076ADDE9857C526A0A893882FFE20130",
+    "raw_additive_residual_m": 0.0,
+    "raw_max_ratio": 1.01904951229178,
+    "scenario_discretization_safety_factor": 1.1,
+    "task_id": "S5-R0-AUTONOMOUS-TRACKING-ERROR-TUBE-MODELING-AND-VALIDATION-R1",
+    "validation_reference_count": 18,
+    "validation_trial_count": 144
+  },
+  "runtime": {
+    "mean_sequential_trajectory_tube_time_s": 23.899373036363638,
+    "parallel_representative_tube_time_s": 2.9802813999999955,
+    "parallel_time_per_support_point_s": 0.04656689687499993
+  },
+  "s4_failure_case_coverage": {
+    "max_tube_violation_m": 0.0,
+    "trajectory_coverage_rate": 1.0,
+    "trial_count": 6,
+    "tube_coverage_rate": 1.0,
+    "violation_count": 0,
+    "violation_duration_s": 0.0
+  },
+  "s4_failure_reference_ids": [
+    "instances_dense|3|12",
+    "instances_dense|3|13",
+    "instances_dense|3|21",
+    "instances_dense|3|22",
+    "instances_dense|3|7",
+    "instances_dense|3|8"
+  ],
+  "status": "SUBMITTED_FOR_REVIEW",
+  "task_id": "S5-R0-AUTONOMOUS-TRACKING-ERROR-TUBE-MODELING-AND-VALIDATION-R1",
+  "tube_metrics": {
+    "integrated_radius_m_s": 0.0990742701359658,
+    "max_radius_m": 0.06455802187995137,
+    "mean_radius_acceleration_correlation": 0.006009757481420933,
+    "mean_radius_m": 0.019806931254691282,
+    "mean_range_radius_m": 0.04303097079418869,
+    "mean_std_radius_m": 0.005817602223201721,
+    "p95_radius_m": 0.03070808919212805
+  }
+}

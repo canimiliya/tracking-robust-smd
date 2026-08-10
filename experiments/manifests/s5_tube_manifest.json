@@ -7,6 +7,7 @@
     "reference": "0C51602C854B52F77A8148A507C260AA2131876F5FA8E31766AF04D1676C254B"
   },
   "branch": "feat/error-tube",
+  "calibration_sha256": "1D24A9BF5D35D7A3332B294731F9C256B038AECB2207A6B89D05859A85D3F3C4",
   "design_scenarios": [
     {
       "angle_rad": 0.0,
@@ -6627,7 +6628,21 @@
       "trial_id": "calibration|instances_simple|9|0|cal_independent_piecewise_1202"
     }
   ],
-  "holdout_executed": false,
+  "holdout_executed": true,
+  "holdout_execution_head": "c5715d4274e3491b08babe2c7f580c0d8d583d16",
+  "holdout_result": {
+    "final_label": "S5_TRACKING_ERROR_TUBE_READY",
+    "primary": {
+      "max_tube_violation_m": 0.0,
+      "trajectory_coverage_rate": 1.0,
+      "trial_count": 110,
+      "tube_coverage_rate": 1.0,
+      "violation_count": 0,
+      "violation_duration_s": 0.0
+    },
+    "summary_sha256": "8999109D25521799F753E0B8901FABA38B42750C7460A9309F60AEDEB31791AA",
+    "validation_csv_sha256": "AAE571BFFAA4473B7E06642EF374C4DD879A5983B53F82DD475201511B5D1AE2"
+  },
   "initial_error": "zero",
   "manifest_created_at_head": "20707c51f1b25652a1dae7bc57d368589cd346d7",
   "primary_disturbance_set": {

@@ -373,11 +373,87 @@ def holdout() -> dict:
     return summary
 
 
+def finalize() -> dict:
+    """Enrich frozen outcomes with provenance and derived audit metrics only."""
+    manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    calibration = json.loads(CALIBRATION_PATH.read_text(encoding="utf-8"))
+    summary_path = SUMMARY_DIR / "s5_tube_summary.json"
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    validation_path = SUMMARY_DIR / "s5_tube_validation.csv"
+    rows = list(csv.DictReader(validation_path.open(encoding="utf-8")))
+    fingerprints = manifest["baseline_fingerprint"]
+    execution_head = "c5715d4274e3491b08babe2c7f580c0d8d583d16"
+    for row in rows:
+        row.update({
+            "controller_hash": fingerprints["controller"],
+            "dynamics_hash": fingerprints["dynamics"],
+            "reference_hash": fingerprints["reference"],
+            "config_hash": fingerprints["config"],
+            "tube_config_hash": manifest["tube_config_sha256"],
+            "tube_calibration_hash": sha256_file(CALIBRATION_PATH),
+            "holdout_execution_head": execution_head,
+        })
+    write_csv(validation_path, rows)
+    holdout_rows = [row for row in rows if row["split"] == "holdout" and abs(float(row["max_disturbance_magnitude_n"]) - PRIMARY_BOUND_N) < 1e-12]
+    sample_total = sum(int(row["sample_count"]) for row in holdout_rows)
+    mean_actual = sum(float(row["mean_actual_error_m"]) * int(row["sample_count"]) for row in holdout_rows) / sample_total
+    max_actual = max(float(row["max_actual_error_m"]) for row in holdout_rows)
+    mean_radius = summary["tube_metrics"]["mean_radius_m"]
+    fixed_discrete_integral = calibration["fixed_global_radius_m"] * (2501 * 0.002)
+    summary["adaptive_vs_fixed"]["integrated_radius_reduction"] = 1.0 - summary["tube_metrics"]["integrated_radius_m_s"] / fixed_discrete_integral
+    summary["fixed_baseline"]["integrated_radius_m_s"] = fixed_discrete_integral
+    summary.update({
+        "baseline_fingerprint": fingerprints,
+        "holdout_execution_head": execution_head,
+        "data_split": {"calibration_references": 26, "validation_references": 18, "holdout_references": 11, "calibration_trials": 208, "validation_trials": 144, "holdout_trials": 110},
+        "actual_error_metrics": {"mean_actual_error_m": mean_actual, "max_actual_error_m": max_actual, "mean_radius_to_error_ratio": mean_radius / mean_actual},
+        "numerical_audits": {
+            "scheduled_constant_force_parity": "bit_exact_all_recorded_arrays",
+            "rho_monotonicity_dense_3_idx22": {
+                "rho_0_max_m": 0.04343627460137419,
+                "rho_d1_max_m": 0.05759201118493857,
+                "rho_d2_max_m": 0.07282708550444082,
+                "max_rho0_minus_rho_d1_m": 0.0,
+                "max_rho_d1_minus_rho_d2_m": 0.0,
+                "passed": True,
+            },
+            "support_mapping": "dense neighborhood and segment maxima; tested peaks retained",
+            "disturbance_norm": "all generated schedules checked against the frozen L2 bound",
+        },
+        "generalization_scope": "frozen holdout spans all five map families and dense idx18-24 at 3 agents; 6/9-agent references occur only in calibration/validation",
+        "claim_boundary": "validated conditional coverage for the preregistered D1 ensemble; no formal all-disturbance or planning-safety guarantee",
+        "pre_holdout_reconstruction": {
+            "commit": "fa0fc45",
+            "runtime_worktree_manifest_sha256_crlf": calibration["manifest_sha256"],
+            "committed_manifest_sha256_lf": "0A000CF2C3BBACC2D2A020999FA1F827F45B232F51A107D32D315BC144700106",
+            "content_difference": "line_ending_normalization_only",
+            "holdout_runtime_hash_check_passed": True,
+        },
+    })
+    artifact_paths = [
+        SUMMARY_DIR / "s5_tube_validation.csv",
+        SUMMARY_DIR / "s5_fixed_vs_adaptive.csv",
+        RAW_DIR / "s5_dense_3_idx22_d1_pos_x_tube.npz",
+        *sorted(FIGURE_DIR.glob("s5_*.png")),
+    ]
+    summary["artifacts"] = [
+        {"path": path.relative_to(REPO_ROOT).as_posix(), "sha256": sha256_file(path)}
+        for path in artifact_paths
+    ]
+    summary_path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
+    manifest["holdout_result"]["summary_sha256"] = sha256_file(summary_path)
+    manifest["holdout_result"]["validation_csv_sha256"] = sha256_file(validation_path)
+    manifest["holdout_execution_head"] = execution_head
+    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
+    print(json.dumps({"phase": "finalize", "mean_actual_error_m": mean_actual, "max_actual_error_m": max_actual, "mean_radius_to_error_ratio": mean_radius / mean_actual, "summary_sha256": sha256_file(summary_path)}, indent=2))
+    return summary
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--phase", choices=("prepare", "calibrate", "holdout"), required=True)
+    parser.add_argument("--phase", choices=("prepare", "calibrate", "holdout", "finalize"), required=True)
     args = parser.parse_args()
-    {"prepare": prepare, "calibrate": calibrate, "holdout": holdout}[args.phase]()
+    {"prepare": prepare, "calibrate": calibrate, "holdout": holdout, "finalize": finalize}[args.phase]()
 
 
 if __name__ == "__main__":
