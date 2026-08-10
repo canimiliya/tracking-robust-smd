@@ -1,0 +1,30 @@
+task_id: S5-R0-AUTONOMOUS-TRACKING-ERROR-TUBE-MODELING-AND-VALIDATION-R1
+method: nonlinear_reference_conditioned_scenario_envelope
+primary_disturbance_bound_n: 0.005
+stress_disturbance_bound_n: 0.010
+control_dt_s: 0.01
+dynamics_dt_s: 0.002
+initial_error: zero
+disturbance_switch_period_s: 0.25
+design_scenario_count: 21
+calibration_schedules_per_reference: 8
+validation_schedules_per_reference: 8
+holdout_schedules_per_reference: 10
+scenario_discretization_safety_factor: 1.10
+numerical_tolerance_m: 1.0e-9
+meaningful_conservatism_reduction: 0.10
+worker_limit: 20
+split:
+  holdout:
+    - instances_dense / 3 agents / idx 18-24
+    - instances_simple / 3 agents / idx 4
+    - instances_connected_room / 3 agents / idx 4
+    - instances_empty / 3 agents / idx 4
+    - instances_shelf / 3 agents / idx 4
+  validation:
+    - instances_dense / 3 agents / idx 9-17
+    - all five maps / 3 agents / idx 3
+    - instances_empty / 6 and 9 agents / idx 0
+    - instances_shelf / 6 and 9 agents / idx 0
+  calibration:
+    - all remaining references in the frozen 55-reference S4 catalog
