@@ -1,0 +1,20 @@
+{
+  "calibration_reference_count": 26,
+  "calibration_trial_count": 208,
+  "contract_hashes": {
+    "configs/tr_smd/tracking_error_tube.yaml": "0D36005AE75088A4626C30616BEA29485F0592BE34A8A66990F39BC533EF7240",
+    "docs/S5_TUBE_VALIDATION_CONTRACT.md": "3FD5545F866C556206CB3D47DC77C8B534CEDF046891CC744FCBF937BB91FA02",
+    "docs/TRACKING_ERROR_TUBE_CONTRACT.md": "3247BDFED5804486FB5575102CFACEACF11928E574465AF36C1E1380A577BFCA"
+  },
+  "final_additive_inflation_m": 1e-09,
+  "final_inflation_factor": 1.120954463520958,
+  "fixed_global_radius_m": 0.14392941455961325,
+  "holdout_used": false,
+  "manifest_sha256": "1895D3B13A49282C194326BF8AA7D756076ADDE9857C526A0A893882FFE20130",
+  "raw_additive_residual_m": 0.0,
+  "raw_max_ratio": 1.01904951229178,
+  "scenario_discretization_safety_factor": 1.1,
+  "task_id": "S5-R0-AUTONOMOUS-TRACKING-ERROR-TUBE-MODELING-AND-VALIDATION-R1",
+  "validation_reference_count": 18,
+  "validation_trial_count": 144
+}
