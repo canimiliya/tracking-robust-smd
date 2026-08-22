@@ -47,12 +47,71 @@ jobs:
           private_mdsu_source_included=false
           algorithm_output=false
           EOF
-          sha256sum bridge_out/IDENTITY.txt
 
       - name: Upload exact verified dataset
         uses: actions/upload-artifact@v4
         with:
           name: mdsu-d4rl-hcme-exact
+          path: bridge_out/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+
+  transfer-cache:
+    if: ${{ contains(github.event.pull_request.body, 'CACHE_URL=') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PR_BODY: ${{ github.event.pull_request.body }}
+      EXPECTED_BYTES: '2152219'
+      EXPECTED_SHA256: 2e2d1f6ee884bb51ceff4103db17f57849bc98dc027a6187e65c168edbc47de9
+      FILE: hcme_seed0.immutable_cache.pt
+    steps:
+      - name: Extract one-time file-scoped URL without logging it
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os
+          lines=[x.strip() for x in os.environ['PR_BODY'].splitlines() if x.strip().startswith('CACHE_URL=')]
+          if len(lines)!=1:
+              raise SystemExit('expected exactly one CACHE_URL line')
+          url=lines[0].split('=',1)[1].strip()
+          if not url.startswith('https://raw.githubusercontent.com/'):
+              raise SystemExit('unexpected cache URL host')
+          open('/tmp/mdsu_cache_url','w').write(url)
+          PY
+
+      - name: Download exact immutable cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p bridge_out
+          curl -fL --retry 5 --retry-delay 2 --connect-timeout 30 "$(cat /tmp/mdsu_cache_url)" -o "bridge_out/$FILE"
+          rm -f /tmp/mdsu_cache_url
+
+      - name: Verify frozen cache identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual_bytes="$(stat -c%s "bridge_out/$FILE")"
+          test "$actual_bytes" = "$EXPECTED_BYTES"
+          echo "$EXPECTED_SHA256  bridge_out/$FILE" | sha256sum -c -
+          cat > bridge_out/IDENTITY.txt <<EOF
+          role=frozen immutable dynamics cache for MDSU formal Stage-1
+          task=halfcheetah-medium-expert-v2
+          seed=0
+          filename=$FILE
+          bytes=$EXPECTED_BYTES
+          sha256=$EXPECTED_SHA256
+          algorithm_source_included=false
+          dynamics_retrained=false
+          EOF
+
+      - name: Upload verified exact cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: mdsu-hcme-seed0-immutable-cache-exact
           path: bridge_out/
           if-no-files-found: error
           compression-level: 0
