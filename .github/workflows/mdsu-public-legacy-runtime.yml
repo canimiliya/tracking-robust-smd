@@ -1,0 +1,124 @@
+name: MDSU Public Legacy Runtime Bridge
+
+on:
+  pull_request:
+    branches:
+      - tmp/mdsu-public-data-bridge-20260823
+
+permissions:
+  contents: read
+
+jobs:
+  legacy-env:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 50
+    steps:
+      - name: System dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1-mesa-dev libglew-dev libosmesa6-dev patchelf pax-utils
+
+      - name: Create Python 3.7 environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          source "$(conda info --base)/etc/profile.d/conda.sh"
+          conda create -y -n mdsu37 python=3.7.16 pip
+          conda activate mdsu37
+          python -V
+          python -m pip install 'numpy==1.21.6' 'Cython<3' 'gym==0.23.1' 'mujoco-py==2.1.2.14' 'h5py==3.7.0' 'tqdm<5'
+          python -m pip install 'torch==1.8.1+cpu' -f https://download.pytorch.org/whl/torch_stable.html
+          git clone -q https://github.com/Farama-Foundation/D4RL.git /tmp/d4rl-src
+          cd /tmp/d4rl-src
+          git checkout -q 89141a689b0353b0dac3da5cba60da4b1b16254d
+          python -m pip install --no-deps .
+
+      - name: Install MuJoCo 2.1.0
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.mujoco"
+          curl -fL --retry 5 https://github.com/google-deepmind/mujoco/releases/download/2.1.0/mujoco210-linux-x86_64.tar.gz -o /tmp/mujoco210.tar.gz
+          tar -xzf /tmp/mujoco210.tar.gz -C "$HOME/.mujoco"
+          test -f "$HOME/.mujoco/mujoco210/bin/libmujoco210.so"
+
+      - name: Smoke legacy D4RL v2 environments
+        shell: bash
+        env:
+          MUJOCO_PY_MUJOCO_PATH: /home/runner/.mujoco/mujoco210
+          LD_LIBRARY_PATH: /home/runner/.mujoco/mujoco210/bin:/usr/lib/x86_64-linux-gnu
+          D4RL_SUPPRESS_IMPORT_ERROR: '1'
+          MUJOCO_GL: osmesa
+        run: |
+          set -euo pipefail
+          source "$(conda info --base)/etc/profile.d/conda.sh"
+          conda activate mdsu37
+          python - <<'PY'
+          import hashlib, json, sys
+          import gym, torch
+          import d4rl.gym_mujoco
+          out={'status':'PASS','python':sys.version,'gym':gym.__version__,'torch':torch.__version__,'tasks':{}}
+          for task in ['halfcheetah-medium-expert-v2','hopper-medium-v2','walker2d-medium-v2']:
+              env=gym.make(task)
+              obs=env.reset(); action=env.action_space.sample(); nxt,r,done,info=env.step(action)
+              out['tasks'][task]={'obs_shape':list(obs.shape),'action_shape':list(action.shape),'step_reward':float(r),'done':bool(done),'normalized_zero_return_x100':float(env.get_normalized_score(0.0)*100.0)}
+              env.close()
+          open('/tmp/legacy_env_probe.json','w').write(json.dumps(out,indent=2))
+          print(json.dumps(out,indent=2))
+          PY
+
+      - name: Build relocatable legacy runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          source "$(conda info --base)/etc/profile.d/conda.sh"
+          conda activate mdsu37
+          python -m pip install 'conda-pack<0.9'
+          mkdir -p /tmp/mdsu-legacy-portable/libs /tmp/mdsu-osmesa-deps
+          conda-pack -n mdsu37 -o /tmp/mdsu-legacy-portable/env.tar.gz
+          cp /tmp/mujoco210.tar.gz /tmp/mdsu-legacy-portable/mujoco210.tar.gz
+          cp /tmp/legacy_env_probe.json /tmp/mdsu-legacy-portable/legacy_env_probe.json
+          cp -L /usr/lib/x86_64-linux-gnu/libOSMesa.so.8 /tmp/mdsu-legacy-portable/libs/libOSMesa.so.8
+          lddtree -l /usr/lib/x86_64-linux-gnu/libOSMesa.so.8 | while read -r lib; do
+            [ -f "$lib" ] || continue
+            b="$(basename "$lib")"
+            case "$b" in
+              libc.so.*|libm.so.*|libpthread.so.*|librt.so.*|libdl.so.*|ld-linux*.so.*|libstdc++.so.*|libgcc_s.so.*) continue ;;
+            esac
+            cp -L "$lib" "/tmp/mdsu-osmesa-deps/$b"
+          done
+          cp /usr/lib/x86_64-linux-gnu/libOSMesa.so.8 /tmp/mdsu-osmesa-deps/libOSMesa.so.8
+          (cd /tmp/mdsu-osmesa-deps && sha256sum * > SHA256SUMS.txt)
+          sha256sum /tmp/mdsu-legacy-portable/env.tar.gz /tmp/mdsu-legacy-portable/mujoco210.tar.gz > /tmp/mdsu-legacy-portable/SHA256SUMS.txt
+          cat > /tmp/mdsu-legacy-portable/README.txt <<'EOF'
+          Public-dependency-only portable runtime for the MDSU reproduction.
+          Extract env.tar.gz into a new prefix and run bin/conda-unpack.
+          Extract mujoco210.tar.gz separately. Set MUJOCO_PY_MUJOCO_PATH to that mujoco210 directory.
+          Prepend the downloaded mdsu-osmesa-deps directory and <mujoco210>/bin to LD_LIBRARY_PATH.
+          D4RL source commit: 89141a689b0353b0dac3da5cba60da4b1b16254d
+          Python 3.7.16; PyTorch 1.8.1+cpu; Gym 0.23.1; mujoco-py 2.1.2.14; NumPy 1.21.6.
+          This artifact contains no private MDSU source, data, cache, checkpoint, or result.
+          EOF
+
+      - name: Upload probe evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: mdsu-legacy-env-probe
+          path: /tmp/legacy_env_probe.json
+          retention-days: 1
+
+      - name: Upload relocatable runtime
+        uses: actions/upload-artifact@v4
+        with:
+          name: mdsu-legacy-portable
+          path: /tmp/mdsu-legacy-portable/
+          retention-days: 1
+          compression-level: 0
+
+      - name: Upload OSMesa dependency closure
+        uses: actions/upload-artifact@v4
+        with:
+          name: mdsu-osmesa-deps
+          path: /tmp/mdsu-osmesa-deps/
+          retention-days: 1
+          compression-level: 0
