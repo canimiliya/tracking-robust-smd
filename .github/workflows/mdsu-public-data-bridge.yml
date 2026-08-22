@@ -9,20 +9,51 @@ permissions:
   contents: read
 
 jobs:
-  smoke:
+  fetch-hcme:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 45
+    env:
+      FILE: halfcheetah_medium_expert-v2.hdf5
+      EXPECTED_BYTES: '474567252'
+      EXPECTED_SHA256: 015db75dae5bbe8e94029b71fa0bafc2073365df0c94744e71031189f3f79c06
+      BERKELEY_URL: https://rail.eecs.berkeley.edu/datasets/offline_rl/gym_mujoco_v2/halfcheetah_medium_expert-v2.hdf5
+      HF_URL: https://huggingface.co/datasets/imone/D4RL/resolve/main/halfcheetah_medium_expert-v2.hdf5?download=true
     steps:
       - uses: actions/checkout@v4
-      - name: Public-runner smoke
+
+      - name: Download exact public D4RL HCME file
         shell: bash
         run: |
           set -euo pipefail
-          printf '%s\n' 'MDSU_PUBLIC_DATA_BRIDGE_SMOKE_PASS' > mdsu_bridge_smoke.txt
-          sha256sum mdsu_bridge_smoke.txt
-      - name: Upload smoke evidence
+          mkdir -p bridge_out
+          if ! curl -fL --retry 5 --retry-delay 3 --connect-timeout 30 "$BERKELEY_URL" -o "bridge_out/$FILE"; then
+            rm -f "bridge_out/$FILE"
+            curl -fL --retry 5 --retry-delay 3 --connect-timeout 30 "$HF_URL" -o "bridge_out/$FILE"
+          fi
+
+      - name: Verify exact bytes and SHA256
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual_bytes="$(stat -c%s "bridge_out/$FILE")"
+          test "$actual_bytes" = "$EXPECTED_BYTES"
+          echo "$EXPECTED_SHA256  bridge_out/$FILE" | sha256sum -c -
+          cat > bridge_out/IDENTITY.txt <<EOF
+          role=public D4RL input for MDSU reproduction
+          task=halfcheetah-medium-expert-v2
+          filename=$FILE
+          bytes=$EXPECTED_BYTES
+          sha256=$EXPECTED_SHA256
+          private_mdsu_source_included=false
+          algorithm_output=false
+          EOF
+          sha256sum bridge_out/IDENTITY.txt
+
+      - name: Upload exact verified dataset
         uses: actions/upload-artifact@v4
         with:
-          name: mdsu-public-data-bridge-smoke
-          path: mdsu_bridge_smoke.txt
+          name: mdsu-d4rl-hcme-exact
+          path: bridge_out/
+          if-no-files-found: error
+          compression-level: 0
           retention-days: 1
