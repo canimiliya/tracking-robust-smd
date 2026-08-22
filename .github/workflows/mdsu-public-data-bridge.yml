@@ -1,0 +1,28 @@
+name: MDSU Public Data Bridge
+
+on:
+  pull_request:
+    branches:
+      - tmp/mdsu-public-data-bridge-20260823
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Public-runner smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s\n' 'MDSU_PUBLIC_DATA_BRIDGE_SMOKE_PASS' > mdsu_bridge_smoke.txt
+          sha256sum mdsu_bridge_smoke.txt
+      - name: Upload smoke evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: mdsu-public-data-bridge-smoke
+          path: mdsu_bridge_smoke.txt
+          retention-days: 1
