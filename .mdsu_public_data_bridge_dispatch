@@ -1,0 +1,6 @@
+purpose=public-runner-smoke-only
+private_mdsu_source_included=false
+paper_parameters_changed=false
+dynamics_retrained=false
+secondary_started=false
+stage2_started=false
